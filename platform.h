@@ -57,7 +57,6 @@ extern PlaydateAPI* pd;
 #endif
 
 // -- Utility functions
-
 void pd_init(PlaydateAPI* playdate);
 void* pd_calloc(size_t nb_of_items, size_t item_size);
 
