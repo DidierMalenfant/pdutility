@@ -28,7 +28,7 @@
 
 #include "pd_api.h"
 
-// -- Global, must be set at load time
+// -- Globals
 extern PlaydateAPI* pd;
 
 // -- Utility macros
@@ -58,6 +58,7 @@ extern PlaydateAPI* pd;
 
 // -- Utility functions
 
+void pd_init(PlaydateAPI* playdate);
 void* pd_calloc(size_t nb_of_items, size_t item_size);
 
 #endif

@@ -25,7 +25,18 @@
  
 #include "pdutility/platform.h"
 
+#include "pd_api.h"
+
+// -- Globals
+
+PlaydateAPI* pd = NULL;
+
 // -- Utility functions
+
+void pd_init(PlaydateAPI* playdate)
+{
+    pd = playdate;
+}
 
 void* pd_calloc(size_t nb_of_items, size_t item_size)
 {
