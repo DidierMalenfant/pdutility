@@ -37,6 +37,10 @@ ifndef NET_MALENFANT_PDUTILITY_PD
 	uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 	UINCDIR := $(call uniq, $(UINCDIR) $(RELATIVE_PARENT_DIR))
 	
+	# -- This is our current version number
+	PDUTILITY_VERSION := 0001
+	UDEFS := $(UDEFS) -DPDUTILITY_VERSION=$(PDUTILITY_VERSION)
+	
 	# -- Add our source files.
 	SRC := $(SRC) \
 		   $(RELATIVE_DIR)/platform.c
