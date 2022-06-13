@@ -2,7 +2,7 @@
 
 Handy utility functions for Playdate development. These can be shared between projects to avoid code duplication.
 
-v0.1-alpha May 16th 2022
+v0.2-alpha June 13th 2022
 
 ## Globals
 
