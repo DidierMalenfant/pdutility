@@ -23,32 +23,41 @@
  *  SOFTWARE.
  */
  
-#include "pdutility/platform.h"
+#ifndef PDUTILITY_PLATFORM_H
+#define PDUTILITY_PLATFORM_H
 
 #include "pd_api.h"
 
 // -- Globals
+extern PlaydateAPI* pd;
 
-PlaydateAPI* pd = NULL;
+// -- Utility macros
+#ifndef PD_ALLOC
+#define PD_ALLOC(size) 			pd->system->realloc(NULL, (size))
+#endif
+
+#ifndef PD_FREE
+#define PD_FREE(mem) 			pd->system->realloc((mem), 0)
+#endif
+
+#ifndef PD_LOG
+    #if 0
+        #define PD_LOG(format, ...)         pd->system->logToConsole((s), ##__VA_ARGS__)
+    #else
+        #define PD_LOG(format, args...)     do { } while(0)
+    #endif
+#endif
+
+#ifndef PD_DBG_LOG
+    #if 0
+        #define PD_DBG_LOG                  PD_LOG
+    #else
+        #define PD_DBG_LOG(format, args...) do { } while(0)
+    #endif
+#endif
 
 // -- Utility functions
+void register_pdutility(PlaydateAPI* playdate);
+void* pd_calloc(size_t nb_of_items, size_t item_size);
 
-void pd_init(PlaydateAPI* playdate)
-{
-    pd = playdate;
-}
-
-void* pd_calloc(size_t nb_of_items, size_t item_size)
-{
-    if (item_size && (nb_of_items > (SIZE_MAX / item_size))) {
-        return NULL;
-    }
-
-    size_t size = nb_of_items * item_size;
-    void* memory = PD_ALLOC(size);
-    if(memory != NULL) {
-        memset(memory, 0, size);
-    }
-    
-    return memory;
-}
+#endif
