@@ -24,12 +24,12 @@
 #
 
 # -- Find out more about where this file is relative to the Makefile including it
-RELATIVE_FILE_PATH := $(lastword $(MAKEFILE_LIST))
-RELATIVE_DIR := $(subst /$(notdir $(RELATIVE_FILE_PATH)),,$(RELATIVE_FILE_PATH))
+_RELATIVE_FILE_PATH := $(lastword $(MAKEFILE_LIST))
+_RELATIVE_DIR := $(subst /$(notdir $(_RELATIVE_FILE_PATH)),,$(_RELATIVE_FILE_PATH))
 
 # -- Add us as an include search folder only if it's not already there
 uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
-UINCDIR := $(call uniq, $(UINCDIR) $(RELATIVE_DIR))
+UINCDIR := $(call uniq, $(UINCDIR) $(_RELATIVE_DIR))
 
 # -- This is our current version number
 PDUTILITY_VERSION := 0002
@@ -37,4 +37,4 @@ UDEFS := $(UDEFS) -DPDUTILITY_VERSION=$(PDUTILITY_VERSION)
 
 # -- Add our source files.
 SRC := $(SRC) \
-	   $(RELATIVE_DIR)/pdutility/platform.c
+	   $(_RELATIVE_DIR)/platform.c
