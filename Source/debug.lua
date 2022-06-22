@@ -45,6 +45,7 @@ class("sampler", { }, pdutility.debug).extends()
 
 function pdutility.debug.sampler:init(sample_period, sampler_fn)
 	pdutility.debug.sampler.super.init()
+	
 	self.sample_period = sample_period
 	self.sampler_fn = sampler_fn
 	self:reset()

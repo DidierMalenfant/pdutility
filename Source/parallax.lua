@@ -39,6 +39,7 @@ class("parallax", { }, pdutility.graphics).extends(gfx.sprite)
 
 function pdutility.graphics.parallax:init()
 	pdutility.graphics.parallax.super.init(self)
+
 	self.layers = {}
 end
 
