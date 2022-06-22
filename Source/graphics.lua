@@ -1,13 +1,34 @@
 --
--- graphics - Handy utility functions for Playdate development.
+--  pdutility.graphics - Handy utility functions for Playdate development.
+--  Based on code originally by Dustin Mierau, jaames, Nic Magnier.
+--
+--  MIT License
+--  Copyright (c) 2022 Didier Malenfant.
+--
+--  Permission is hereby granted, free of charge, to any person obtaining a copy
+--  of this software and associated documentation files (the "Software"), to deal
+--  in the Software without restriction, including without limitation the rights
+--  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+--  copies of the Software, and to permit persons to whom the Software is
+--  furnished to do so, subject to the following conditions:
+--
+--  The above copyright notice and this permission notice shall be included in all
+--  copies or substantial portions of the Software.
+--
+--  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+--  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+--  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+--  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+--  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+--  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+--  SOFTWARE.
 --
 
-local pd <const> = playdate
-local gfx <const> = pd.graphics
+local gfx <const> = playdate.graphics
 
 -- Draw an image tiled within bounds with an optional offset
--- Originally by Dustin Mierau.
-function drawTiledImage(img, bounds, offset_x, offset_y)
+-- luacheck: globals pdutility.graphics.drawTiledImage
+function pdutility.graphics.drawTiledImage(img, bounds, offset_x, offset_y)
 	offset_x = offset_x or 0
 	offset_y = offset_y or 0
 
@@ -20,58 +41,13 @@ function drawTiledImage(img, bounds, offset_x, offset_y)
 	local iw, ih = img:getSize()
 	local sx = math.abs(offset_x % iw) - iw + bounds.x
 	local sy = math.abs(offset_y % ih) - ih + bounds.y
-	
+
 	local cx, cy, cw, ch = gfx.getClipRect()
 	gfx.setClipRect(bounds)
 	img:drawTiled(sx, sy, bounds.width - sx, bounds.height - sy)
 	gfx.setClipRect(cx, cy, cw, ch)
 end
 
--- Robert Curry
-class("Parallax").extends(gfx.sprite)
-
-function Parallax:init()
-	Parallax.super.init(self)
-	self.layers = {}
-end
-
-function Parallax:draw(...)
-	gfx.setClipRect(...)
-	for _, layer in ipairs(self.layers) do
-		local img = layer.image
-		-- lock offset to steps of 2 to reduce flashing
-		local offset = layer.offset - (layer.offset % 2)
-		local w = layer.width
-		img:draw(self.x+offset, self.y)
-		if offset < 0 or offset > w - self.width then
-			if offset > 0 then
-				img:draw(self.x+offset-w, self.y)
-			else
-				img:draw(self.x+offset+w, self.y)
-			end
-		end
-	end
-	gfx.clearClipRect()
-end
-
-function Parallax:addLayer(img, depth)
-	local w, _ = img:getSize()
-	local layer = {}
-	layer.image = img
-	layer.depth = depth
-	layer.offset = 0
-	layer.width = w
-	table.push(self.layers, layer)
-end
-
-function Parallax:scroll(delta)
-	for _, layer in ipairs(self.layers) do
-		layer.offset = math.ring(layer.offset + (delta * layer.depth), -layer.width, 0)
-	end
-	self:markDirty()
-end
-
--- jaames
 -- bezier curve drawing functions for playdate lua
 -- these are based on de Casteljau's algorithm
 -- this site has a nice interactive demo to compare both types of curve: https://pomax.github.io/bezierinfo/#flattening
@@ -79,7 +55,8 @@ end
 -- draws a curve starting at x1,y1, ending at x3,y3, with x2,y2 being a control point that "pulls" the curve towards it
 -- steps is the number of line segments to use, lower is better for performance, higher makes your curve look smoother
 -- the playdate is kinda slow, so it's recommended to find a relatively low step number that looks passable enough!
-function drawQuadraticBezier(x1, y1, x2, y2, x3, y3, steps)
+-- luacheck: globals pdutility.graphics.drawQuadraticBezier
+function pdutility.graphics.drawQuadraticBezier(x1, y1, x2, y2, x3, y3, steps)
   steps = steps or 8
   local d = 1 / steps
   local prevX = x1
@@ -94,11 +71,13 @@ function drawQuadraticBezier(x1, y1, x2, y2, x3, y3, steps)
   end
 end
 
--- draws a curve starting at x1,y1, ending at x4,y4, with x2,y2 and x3,y3 being a control point that "pulls" the curve towards them
--- (nb: this is the kind of curve you make using the pen tool in vector drawing apps like Adobe Illustator!)
--- steps is the number of line segments to use, lower is better for performance, higher makes your curve look smoother
--- the playdate is kinda slow, so it's recommended to find a relatively low step number that looks passable enough!
-function drawCubicBezier(x1, y1, x2, y2, x3, y3, x4, y4, steps)
+-- draws a curve starting at x1,y1, ending at x4,y4, with x2,y2 and x3,y3 being a control point that "pulls"
+-- the curve towards them (nb: this is the kind of curve you make using the pen tool in vector drawing apps
+-- like Adobe Illustator!) steps is the number of line segments to use, lower is better for performance,
+-- higher makes your curve look smoother the playdate is kinda slow, so it's recommended to find a
+-- relatively low step number that looks passable enough!
+-- luacheck: globals pdutility.graphics.drawCubicBezier
+function pdutility.graphics.drawCubicBezier(x1, y1, x2, y2, x3, y3, x4, y4, steps)
   steps = steps or 12
   local d = 1 / steps
   local prevX = x1
@@ -114,25 +93,25 @@ function drawCubicBezier(x1, y1, x2, y2, x3, y3, x4, y4, steps)
 end
 
 -- example usage:
-function playdate.update()
-  -- curves are just drawn as a bunch of lines, so you can tweak line settings like width, cap, color, etc
-  gfx.setLineWidth(2)
-  drawQuadraticBezier(
-	10, 80,  -- curve start x,y coordinate
-	200, 50, -- control x,y coordinate - your curve will be "pulled" towards this point
-	390, 80, -- curve end x,y coordinate
-	8 -- number of line segments used to draw the curve, 8 is probably plenty to get a smooth curve
-  )
-  drawCubicBezier(
-	10, 160,  -- curve start x,y coordinate
-	100, 110, -- first control x,y coordinate
-	300, 210, -- seccond control x,y coordinate
-	390, 160, -- curve end x,y coordinate
-	12 -- number of line segments used to draw the curve
-end
-
--- Nic Magnier
-function getSvgPaths( svg_filepath )
+-- function playdate.update()
+--   -- curves are just drawn as a bunch of lines, so you can tweak line settings like width, cap, color, etc
+--   gfx.setLineWidth(2)
+--   drawQuadraticBezier(
+-- 	10, 80,  -- curve start x,y coordinate
+-- 	200, 50, -- control x,y coordinate - your curve will be "pulled" towards this point
+-- 	390, 80, -- curve end x,y coordinate
+-- 	8 -- number of line segments used to draw the curve, 8 is probably plenty to get a smooth curve
+--   )
+--   drawCubicBezier(
+-- 	10, 160,  -- curve start x,y coordinate
+-- 	100, 110, -- first control x,y coordinate
+-- 	300, 210, -- seccond control x,y coordinate
+-- 	390, 160, -- curve end x,y coordinate
+-- 	12 -- number of line segments used to draw the curve
+-- )
+-- end
+-- luacheck: globals pdutility.graphics.getSvgPaths
+function pdutility.graphics.getSvgPaths( svg_filepath )
 	local file, file_error = playdate.file.open( svg_filepath, playdate.file.kFileRead )
 	assert(file, "getSvgPaths(), Cannot open file", svg_filepath," (",file_error,")")
 

@@ -1,4 +1,29 @@
--- Nic Magnier
+--
+--  pdutility.betamax - Handy utility functions for Playdate development.
+--  Based on code originally by Nic Magnier.
+--
+--  MIT License
+--  Copyright (c) 2022 Didier Malenfant.
+--
+--  Permission is hereby granted, free of charge, to any person obtaining a copy
+--  of this software and associated documentation files (the "Software"), to deal
+--  in the Software without restriction, including without limitation the rights
+--  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+--  copies of the Software, and to permit persons to whom the Software is
+--  furnished to do so, subject to the following conditions:
+--
+--  The above copyright notice and this permission notice shall be included in all
+--  copies or substantial portions of the Software.
+--
+--  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+--  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+--  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+--  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+--  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+--  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+--  SOFTWARE.
+--
+
 --[[
 Betamax is a module that record a gameplay session and let you play it back.
 It records inputs, timings and random numbers and feed them back to the game during playback.
@@ -19,14 +44,18 @@ betamax_eof()
 
 == How to Use ==
 - How to record: When you want to record a game session, simply press the Menu button of the playdate.
-- How to playback: To playback the previous recording, simply boot the game while holding Left on the D-Pad. You can fast forward 10x by pressing right on the D-Pad.
+- How to playback: To playback the previous recording, simply boot the game while holding Left on the D-Pad.
+  You can fast forward 10x by pressing right on the D-Pad.
 
 The recording is save in the Disk/Data/(bundleID) folder.
-betamax_eof() can take an optional argument, which is the frame to directly jump to. It can be negative to jump to a frame from the end of the recording (for example -100)
+betamax_eof() can take an optional argument, which is the frame to directly jump to.
+It can be negative to jump to a frame from the end of the recording (for example -100)
 
 == Limitations ==
-- The playback will properly work only if the source code is functionally identical. Code changes can break the playback.
-- Number have a lower precision when running with betamax. Numbers are identical during recording and playback but less precise than when betamax is not used.
+- The playback will properly work only if the source code is functionally identical. Code changes
+  can break the playback.
+- Number have a lower precision when running with betamax. Numbers are identical during recording and
+  playback but less precise than when betamax is not used.
 - Microphone inputs are not supported
 - Handling inputs via callbacks is not supported
 - Changing system callback (like playdate.update or playdate.gameWillPause) at runtime is not handled
@@ -42,7 +71,11 @@ betamax_eof() can take an optional argument, which is the frame to directly jump
 
 ]]
 
-betamax = {}
+-- luacheck: globals pdutility.math
+import "math"
+
+-- luacheck: globals pdutility.debug.betamax
+pdutility.debug.betamax = {}
 
 -- save reference to original functions we will replace
 local og = {
@@ -73,6 +106,7 @@ local og = {
 local player = {
 	frame = 0
 }
+
 local recording = {
 	inputs = {},
 	random = {},
@@ -83,7 +117,7 @@ local recording = {
 	getSecondsSinceEpoch = {},
 }
 
--- fraction part of a float is converted as an integer to be saved more consitently in the json
+-- fraction part of a float is converted as an integer to be saved more consistently in the json
 -- fraction is saved as an integer (math.floor(fraction*float_precision))
 local float_precision = 10000000000
 
@@ -101,7 +135,7 @@ local frame_input = {
 	accData = { 0, 0, 0 }
 }
 
--- we do a weird serialization for number to make sure that what we use during the recording
+-- we do a weird serialisation for number to make sure that what we use during the recording
 -- will be the same value as in the play back
 local function serialize_number( n )
 	if not n then
@@ -148,6 +182,7 @@ local function get_next( attribute_name )
 		reached_end_of_recording()
 		return nil
 	end
+
 	return recording[attribute_name][player[attribute_name]]
 end
 
@@ -158,9 +193,9 @@ local function set_next( attribute_name, content )
 end
 
 -- return the next entry recorded for a specific attribute
-local function get_next_tuple( attribute_name )
-	return table.unpack(get_next( attribute_name ))
-end
+-- local function get_next_tuple( attribute_name )
+--	return table.unpack(get_next( attribute_name ))
+-- end
 
 local function set_next_tuple( attribute_name, ... )
 	set_next( attribute_name, {...} )
@@ -182,12 +217,13 @@ end
 -- we playback when we hold A, B and Left when booting
 local is_playback = playdate.buttonIsPressed(playdate.kButtonLeft)
 
--- we setup the game for playbacka
 if is_playback then
+	-- we setup the game for playback
 	-- initialize player
 	player = {
 		frame = 0
 	}
+
 	for attribute_name in pairs(recording) do
 		player[attribute_name] = 0
 	end
@@ -196,24 +232,46 @@ if is_playback then
 	load_recording()
 	print("Playback recording", #recording.inputs, "frames")
 
+	-- luacheck: globals playdate.getCurrentTimeMilliseconds
 	playdate.getCurrentTimeMilliseconds = function() return get_next("getCurrentTimeMilliseconds") end
+
+	-- luacheck: globals playdate.getTime
 	playdate.getTime = function() return get_next( "getTime" ) end
+
+	-- luacheck: globals playdate.getSecondsSinceEpoch
 	playdate.getSecondsSinceEpoch = function() return get_next( "getSecondsSinceEpoch" ) end
+
+	-- luacheck: globals playdate.datastore.read
 	playdate.datastore.read = function() return get_next( "read" ) end
 
+	-- luacheck: globals math.randomseed
 	math.randomseed = function() og.randomseed(get_next( "randomseed" )) end
+
+	-- luacheck: globals math.random
 	math.random = function()
 		return unserialize_number( get_next("random") )
 	end
 
+	-- luacheck: globals playdate.startAccelerometer
 	playdate.startAccelerometer = function() end
-	playdate.stopAccelerometer = function() end
 
--- we setup the game for recording
+	-- luacheck: globals playdate.stopAccelerometer
+	playdate.stopAccelerometer = function() end
 else
-	playdate.getCurrentTimeMilliseconds = function() return set_next( "getCurrentTimeMilliseconds", og.getCurrentTimeMilliseconds() ) end
+	-- we setup the game for recording
+
+	-- luacheck: globals playdate.getCurrentTimeMilliseconds
+	playdate.getCurrentTimeMilliseconds = function()
+		return set_next( "getCurrentTimeMilliseconds", og.getCurrentTimeMilliseconds() )
+	end
+
+	-- luacheck: globals playdate.getTime
 	playdate.getTime = function() return set_next( "getTime", og.getTime() ) end
-	playdate.getSecondsSinceEpoch = function() return set_next_tuple( "getSecondsSinceEpoch", og.getSecondsSinceEpoch() ) end
+
+	-- luacheck: globals playdate.getSecondsSinceEpoch
+	playdate.getSecondsSinceEpoch = function()
+		return set_next_tuple( "getSecondsSinceEpoch", og.getSecondsSinceEpoch() )
+	end
 
 	playdate.datastore.read = function( ... )
 		local read_content = og.datastoreRead(...)
@@ -226,6 +284,7 @@ else
 		set_next( "randomseed", seed )
 		return og.randomseed( seed )
 	end
+
 	math.random = function(...)
 		local r, n = serialize_number( og.random(...) )
 		set_next( "random", r )
@@ -237,17 +296,19 @@ else
 end
 
 -- common input functions (Buttons)
-playdate.buttonIsPressed = function( b )
+playdate.buttonIsPressed = function( b )	-- luacheck: globals playdate.buttonIsPressed
 	local buttons_state = recording.inputs[player.frame][1]
 	return (buttons_state&b)>0
 end
-playdate.buttonJustPressed = function( b )
+
+playdate.buttonJustPressed = function( b )	-- luacheck: globals playdate.buttonJustPressed
 	if player.frame==1 then return false end
 	local buttons_state = recording.inputs[player.frame][1]
 	local prev_buttons_state = recording.inputs[player.frame-1][1]
 	return ((buttons_state&b)>0) and ((prev_buttons_state&b)==0)
 end
-playdate.buttonJustReleased = function( b )
+
+playdate.buttonJustReleased = function( b )	-- luacheck: globals playdate.buttonJustReleased
 	if player.frame==1 then return false end
 	local buttons_state = recording.inputs[player.frame][1]
 	local prev_buttons_state = recording.inputs[player.frame-1][1]
@@ -255,12 +316,18 @@ playdate.buttonJustReleased = function( b )
 end
 
 -- common crank functions
+
+-- luacheck: globals playdate.isCrankDocked
 playdate.isCrankDocked = function()	return frame_input.isCrankDocked end
+-- luacheck: globals playdate.getCrankPosition
 playdate.getCrankPosition = function() return frame_input.crankPos end
+-- luacheck: globals playdate.getCrankChange
 playdate.getCrankChange = function() return frame_input.crankeDelta, frame_input.crankAcc end
 
 -- common accelerometer functions
+-- luacheck: globals playdate.accelerometerIsRunning
 playdate.accelerometerIsRunning = function() return frame_input.accRunning end
+-- luacheck: globals playdate.readAccelerometer
 playdate.readAccelerometer = function() return table.unpack( frame_input.accData ) end
 
 local function save_input_frame()
@@ -387,7 +454,7 @@ end
 
 -- function to call at the end of main.lua
 -- used to overload user callbacks like playdate.update()
-function betamax_eof( frame_jump )
+function pdutility.debug.betamax.eof( frame_jump )
 	og.update = playdate.update
 	og.gameWillPause = playdate.gameWillPause
 	og.gameWillTerminate = playdate.gameWillTerminate
@@ -396,7 +463,7 @@ function betamax_eof( frame_jump )
 	if is_playback then
 		playdate.update = function()
 			if og.buttonIsPressed(playdate.kButtonRight) then
-				for i=1, 10 do
+				for _ = 1, 10 do
 					playback_frame()
 				end
 			else
@@ -427,7 +494,8 @@ function betamax_eof( frame_jump )
 		if frame_jump<0 then
 			frame_jump = (#recording.inputs) + frame_jump
 		end
-		frame_jump = math.clamp(frame_jump, 1, #recording.inputs)
+
+		frame_jump = pdutility.math.clamp(frame_jump, 1, #recording.inputs)
 
 		print("jump to:", frame_jump)
 
@@ -437,6 +505,6 @@ function betamax_eof( frame_jump )
 	end
 end
 
-function betamax_frame()
+function pdutility.debug.betamax.printFrame()
 	print("Betamax current frame:", player.frame)
 end

@@ -1,15 +1,36 @@
 --
--- debug - Handy utility functions for Playdate development.
+--  pdutility.debug - Handy utility functions for Playdate development.
+--  Based on code originally by Denisov Yaroslav, Dustin Mierau.
+--
+--  MIT License
+--  Copyright (c) 2022 Didier Malenfant.
+--
+--  Permission is hereby granted, free of charge, to any person obtaining a copy
+--  of this software and associated documentation files (the "Software"), to deal
+--  in the Software without restriction, including without limitation the rights
+--  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+--  copies of the Software, and to permit persons to whom the Software is
+--  furnished to do so, subject to the following conditions:
+--
+--  The above copyright notice and this permission notice shall be included in all
+--  copies or substantial portions of the Software.
+--
+--  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+--  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+--  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+--  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+--  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+--  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+--  SOFTWARE.
 --
 
-import "CoreLibs/object"
 import "CoreLibs/graphics"
+import "CoreLibs/object"
 
 local gfx <const> = playdate.graphics
 
 -- Show Toast message (temporary text that pop up on the screen)
--- Originally by Denisov Yaroslav.
-function showToast(x, y, text, duration)
+function pdutility.debug.showToast(x, y, text, duration)
 	local t = playdate.frameTimer.new(duration)
 	t.updateCallback = function()
 		gfx.drawTextAligned(text, x, y, kTextAlignment.center)
@@ -17,17 +38,16 @@ function showToast(x, y, text, duration)
 end
 
 -- Graphs samples collected/frame against a specified sample duration
--- Originally by Dustin Mierau.
-class("Sampler").extends()
+class("pdutility.debug.sampler").extends()
 
-function Sampler:init(sample_period, sampler_fn)
-	Sampler.super.init()
+function pdutility.debug.sampler:init(sample_period, sampler_fn)
+	pdutility.debug.sampler.super.init()
 	self.sample_period = sample_period
 	self.sampler_fn = sampler_fn
 	self:reset()
 end
 
-function Sampler:reset()
+function pdutility.debug.sampler:reset()
 	self.last_sample_time = nil
 	self.samples = {}
 	self.current_sample = {}
@@ -35,7 +55,7 @@ function Sampler:reset()
 	self.high_watermark = 0
 end
 
-function Sampler:print()
+function pdutility.debug.sampler:print()
 	print("")
 	
 	print("Sampler Info")
@@ -58,7 +78,7 @@ function Sampler:print()
 	print("")
 end
 
-function Sampler:draw(x, y, width, height)
+function pdutility.debug.sampler:draw(x, y, width, height)
 	local time_delta = 0
 	local current_time <const> = playdate.getCurrentTimeMilliseconds()
 	local graph_padding <const> = 1
@@ -94,6 +114,7 @@ function Sampler:draw(x, y, width, height)
 	gfx.setColor(gfx.kColorWhite)
 	gfx.fillRect(x, y, width, height)
 	gfx.setColor(gfx.kColorBlack)
+	
 	for i, v in ipairs(self.samples) do
 		local sample_height <const> = math.max(0, draw_height * (v / self.high_watermark))
 		gfx.drawLine(x + graph_padding + i - 1, y + height - graph_padding, x + i - 1 + graph_padding, (y + height - graph_padding) - sample_height)
