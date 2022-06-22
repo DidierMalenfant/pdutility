@@ -24,6 +24,8 @@
 --  SOFTWARE.
 --
 
+import "CoreLibs/easing"
+
 import "math"
 
 pdutility = pdutility or {}							-- luacheck: globals pdutility
