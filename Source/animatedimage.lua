@@ -43,6 +43,8 @@ class("animatedImage", { }, pdutility.graphics).extends()
 --   paused: start in a paused state.
 --   loop: loop the animation.
 function pdutility.graphics.animatedImage:init(image_table_path, options)
+	pdutility.graphics.animatedImage.super.init()
+
 	options = options or {}
 
 	self.image_table = gfx.imagetable.new(image_table_path)

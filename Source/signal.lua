@@ -47,6 +47,8 @@ pdutility.utils = pdutility.utils or {}		-- luacheck: globals pdutility.utils
 class("signal", { }, pdutility.utils).extends()
 
 function pdutility.utils.signal:init()
+	pdutility.utils.signal.super.init()
+
 	self.listeners = {}
 end
 
