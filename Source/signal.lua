@@ -40,8 +40,11 @@
 
 import "CoreLibs/object"
 
+pdutility = pdutility or {}					-- luacheck: globals pdutility
+pdutility.utils = pdutility.utils or {}		-- luacheck: globals pdutility.utils
+
 -- luacheck: globals pdutility.utils.signal
-class("pdutility.utils.signal").extends()
+class("signal", { }, pdutility.utils).extends()
 
 function pdutility.utils.signal:init()
 	self.listeners = {}

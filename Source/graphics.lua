@@ -24,6 +24,9 @@
 --  SOFTWARE.
 --
 
+pdutility = pdutility or {}							-- luacheck: globals pdutility
+pdutility.graphics = pdutility.graphics or {}		-- luacheck: globals pdutility.graphics
+
 local gfx <const> = playdate.graphics
 
 -- Draw an image tiled within bounds with an optional offset

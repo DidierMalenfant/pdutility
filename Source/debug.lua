@@ -27,6 +27,9 @@
 import "CoreLibs/graphics"
 import "CoreLibs/object"
 
+pdutility = pdutility or {}					-- luacheck: globals pdutility
+pdutility.debug = pdutility.debug or {}		-- luacheck: globals pdutility.debug
+
 local gfx <const> = playdate.graphics
 
 -- Show Toast message (temporary text that pop up on the screen)
@@ -38,7 +41,7 @@ function pdutility.debug.showToast(x, y, text, duration)
 end
 
 -- Graphs samples collected/frame against a specified sample duration
-class("pdutility.debug.sampler").extends()
+class("sampler", { }, pdutility.debug).extends()
 
 function pdutility.debug.sampler:init(sample_period, sampler_fn)
 	pdutility.debug.sampler.super.init()

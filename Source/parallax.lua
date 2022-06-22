@@ -29,10 +29,13 @@ import "CoreLibs/object"
 
 import 'math'
 
+pdutility = pdutility or {}							-- luacheck: globals pdutility
+pdutility.graphics = pdutility.graphics or {}		-- luacheck: globals pdutility.graphics
+
 local gfx <const> = playdate.graphics
 
 -- luacheck: globals pdutility.graphics.parallax
-class("pdutility.graphics.parallax").extends(gfx.sprite)
+class("parallax", { }, pdutility.graphics).extends(gfx.sprite)
 
 function pdutility.graphics.parallax:init()
 	pdutility.graphics.parallax.super.init(self)

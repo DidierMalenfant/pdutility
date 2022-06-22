@@ -24,6 +24,8 @@
 --  SOFTWARE.
 --
 
+math = math or {}		-- luacheck: globals math
+
 -- luacheck: globals math.clamp
 function math.clamp(a, min, max)
 	if min > max then

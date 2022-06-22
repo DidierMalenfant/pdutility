@@ -24,6 +24,8 @@
 --  SOFTWARE.
 --
 
+table = table or {}		-- luacheck: globals table
+
 -- luacheck: globals table.random
 function table.random(t)
 	if type(t) ~= "table" then return nil end

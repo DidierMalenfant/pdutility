@@ -47,13 +47,16 @@ import "CoreLibs/object"
 
 import "signal"
 
+pdutility = pdutility or {}					-- luacheck: globals pdutility
+pdutility.utils = pdutility.utils or {}		-- luacheck: globals pdutility.utils
+
 local allowed_variables = {
 	__data = true,
 	__signal = true
 }
 
 -- luacheck: globals pdutility.utils.state
-class("pdutility.utils.state").extends()
+class("state", { }, pdutility.utils).extends()
 
 function pdutility.utils.state:init()
 	self.__data = {}

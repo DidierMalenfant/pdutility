@@ -74,6 +74,9 @@ It can be negative to jump to a frame from the end of the recording (for example
 -- luacheck: globals pdutility.math
 import "math"
 
+pdutility = pdutility or {}					-- luacheck: globals pdutility
+pdutility.debug = pdutility.debug or {}		-- luacheck: globals pdutility.debug
+
 -- luacheck: globals pdutility.debug.betamax
 pdutility.debug.betamax = {}
 

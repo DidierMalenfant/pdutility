@@ -26,6 +26,9 @@
 
 import "math"
 
+pdutility = pdutility or {}							-- luacheck: globals pdutility
+pdutility.animation = pdutility.animation or {}		-- luacheck: globals pdutility.animation
+
 --[[
 class to create simple animations using easing as building blocks
 
@@ -67,7 +70,7 @@ local _runningSequences = table.create(32,0)
 local _previousUpdateTime = playdate.getCurrentTimeMilliseconds()
 
 -- luacheck: globals pdutility.animation.sequence
-class("pdutility.animation.sequence").extends()
+class("sequence", { }, pdutility.animation).extends()
 
 pdutility.animation.sequence.__index = pdutility.animation.sequence
 
