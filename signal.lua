@@ -45,7 +45,7 @@ pdutility.utils = pdutility.utils or {}
 class("signal", { }, pdutility.utils).extends()
 
 function pdutility.utils.signal:init()
-	pdutility.utils.signal.super.init()
+    pdutility.utils.signal.super.init(self)
 
     self.listeners = {}
 end

@@ -58,7 +58,7 @@ local allowed_variables = {
 class("state", { }, pdutility.utils).extends()
 
 function pdutility.utils.state:init()
-	pdutility.utils.state.super.init()
+    pdutility.utils.state.super.init(self)
 
     self.__data = {}
     self.__signal = pdutility.utils.signal()
