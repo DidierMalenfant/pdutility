@@ -189,7 +189,8 @@ end
 -- save the next entry for a specific attribute
 local function set_next( attribute_name, content )
     table.insert( recording[attribute_name], content)
-    return contentend
+    return content
+end
 
 -- return the next entry recorded for a specific attribute
 -- local function get_next_tuple( attribute_name )
