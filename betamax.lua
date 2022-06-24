@@ -30,15 +30,15 @@ It records inputs, timings and random numbers and feed them back to the game dur
 
 == How to Add betamax in your project ==
 in main.lua:
-	import betamax as the very top of main.lua (before any other file)
-	call betamax_eof() at the bottom of main.lua
+    import betamax as the very top of main.lua (before any other file)
+    call betamax_eof() at the bottom of main.lua
 
 == Example ==
 import 'betamax'
 import 'CoreLibs/graphics'
 
 function playdate.update()
-	-- do stuff
+    -- do stuff
 end
 betamax_eof()
 
@@ -82,42 +82,42 @@ pdutility.debug.betamax = {}
 
 -- save reference to original functions we will replace
 local og = {
-	random = math.random,
-	randomseed = math.randomseed,
+    random = math.random,
+    randomseed = math.randomseed,
 
-	getCurrentTimeMilliseconds = playdate.getCurrentTimeMilliseconds,
-	getTime = playdate.getTime,
-	getSecondsSinceEpoch = playdate.getSecondsSinceEpoch,
+    getCurrentTimeMilliseconds = playdate.getCurrentTimeMilliseconds,
+    getTime = playdate.getTime,
+    getSecondsSinceEpoch = playdate.getSecondsSinceEpoch,
 
-	buttonIsPressed = playdate.buttonIsPressed,
-	buttonJustPressed = playdate.buttonJustPressed,
-	buttonJustReleased = playdate.buttonJustReleased,
+    buttonIsPressed = playdate.buttonIsPressed,
+    buttonJustPressed = playdate.buttonJustPressed,
+    buttonJustReleased = playdate.buttonJustReleased,
 
-	accelerometerIsRunning = playdate.accelerometerIsRunning,
-	readAccelerometer = playdate.readAccelerometer,
-	startAccelerometer = playdate.startAccelerometer,
-	stopAccelerometer = playdate.stopAccelerometer,
+    accelerometerIsRunning = playdate.accelerometerIsRunning,
+    readAccelerometer = playdate.readAccelerometer,
+    startAccelerometer = playdate.startAccelerometer,
+    stopAccelerometer = playdate.stopAccelerometer,
 
-	isCrankDocked = playdate.isCrankDocked,
-	getCrankPosition = playdate.getCrankPosition,
-	getCrankChange = playdate.getCrankChange,
+    isCrankDocked = playdate.isCrankDocked,
+    getCrankPosition = playdate.getCrankPosition,
+    getCrankChange = playdate.getCrankChange,
 
-	datastoreRead = playdate.datastore.read
+    datastoreRead = playdate.datastore.read
 }
 
 -- player keep track of the frame and indexes we are at
 local player = {
-	frame = 0
+    frame = 0
 }
 
 local recording = {
-	inputs = {},
-	random = {},
-	randomseed = {},
-	read = {},
-	getCurrentTimeMilliseconds = {},
-	getTime = {},
-	getSecondsSinceEpoch = {},
+    inputs = {},
+    random = {},
+    randomseed = {},
+    read = {},
+    getCurrentTimeMilliseconds = {},
+    getTime = {},
+    getSecondsSinceEpoch = {},
 }
 
 -- fraction part of a float is converted as an integer to be saved more consistently in the json
@@ -126,203 +126,203 @@ local float_precision = 10000000000
 
 -- state of the input for the current frame
 local frame_input = {
-	buttons = 0,
-	accelerometer_running = false,
+    buttons = 0,
+    accelerometer_running = false,
 
-	isCrankDocked = true,
-	crankPos = 0,
-	crankeDelta = 0,
-	crankAcc = 0,
+    isCrankDocked = true,
+    crankPos = 0,
+    crankeDelta = 0,
+    crankAcc = 0,
 
-	accRunning = false,
-	accData = { 0, 0, 0 }
+    accRunning = false,
+    accData = { 0, 0, 0 }
 }
 
 -- we do a weird serialisation for number to make sure that what we use during the recording
 -- will be the same value as in the play back
 local function serialize_number( n )
-	if not n then
-		return nil, nil
-	end
+    if not n then
+        return nil, nil
+    end
 
-	local int = math.floor(n)
+    local int = math.floor(n)
 
-	-- if it is a round number, we just return a single number
-	if int==n then
-		return {n}, n
-	end
+    -- if it is a round number, we just return a single number
+    if int==n then
+        return {n}, n
+    end
 
-	-- for the fraction part of a float we save fraction at an integer too
-	local frac = math.floor((n-int)*float_precision)
-	return {int, frac}, int + frac/float_precision
+    -- for the fraction part of a float we save fraction at an integer too
+    local frac = math.floor((n-int)*float_precision)
+    return {int, frac}, int + frac/float_precision
 end
 
 local function unserialize_number( t )
-	if not t then
-		return nil
-	end
+    if not t then
+        return nil
+    end
 
-	local int, frac = t[1], t[2]
+    local int, frac = t[1], t[2]
 
-	if not frac then
-		return int
-	end
+    if not frac then
+        return int
+    end
 
-	return int + frac/float_precision
+    return int + frac/float_precision
 end
 
 -- when we run out of data, we just quit the game
 local function reached_end_of_recording()
-	print("End of recording")
-	playdate.exit()
+    print("End of recording")
+    playdate.exit()
 end
 
 -- return the next entry recorded for a specific attribute
 local function get_next( attribute_name )
-	player[attribute_name] = player[attribute_name] + 1
-	local result = recording[attribute_name][player[attribute_name]]
-	if not result then
-		reached_end_of_recording()
-		return nil
-	end
+    player[attribute_name] = player[attribute_name] + 1
+    local result = recording[attribute_name][player[attribute_name]]
+    if not result then
+        reached_end_of_recording()
+        return nil
+    end
 
-	return recording[attribute_name][player[attribute_name]]
+    return recording[attribute_name][player[attribute_name]]
 end
 
 -- save the next entry for a specific attribute
 local function set_next( attribute_name, content )
-	table.insert( recording[attribute_name], content)
-	return content
-end
+    table.insert( recording[attribute_name], content)
+    return contentend
 
 -- return the next entry recorded for a specific attribute
 -- local function get_next_tuple( attribute_name )
---	return table.unpack(get_next( attribute_name ))
+--    return table.unpack(get_next( attribute_name ))
 -- end
 
 local function set_next_tuple( attribute_name, ... )
-	set_next( attribute_name, {...} )
-	return ...
+    set_next( attribute_name, {...} )
+    return ...
 end
 
 local function save_recording()
-	playdate.datastore.write(recording, "betamax_recording")
-	print("Recording Saved -", #recording.inputs, "frames")
+    playdate.datastore.write(recording, "betamax_recording")
+    print("Recording Saved -", #recording.inputs, "frames")
 end
 
 local function load_recording()
-	recording = playdate.datastore.read("betamax_recording")
-	if not recording then
-		print("Betamax Error: Couldn't load any recording")
-	end
+    recording = playdate.datastore.read("betamax_recording")
+    if not recording then
+        print("Betamax Error: Couldn't load any recording")
+    end
 end
 
 -- we playback when we hold A, B and Left when booting
 local is_playback = playdate.buttonIsPressed(playdate.kButtonLeft)
 
 if is_playback then
-	-- we setup the game for playback
-	-- initialize player
-	player = {
-		frame = 0
-	}
+    -- we setup the game for playback
+    -- initialize player
+    player = {
+        frame = 0
+    }
 
-	for attribute_name in pairs(recording) do
-		player[attribute_name] = 0
-	end
+    for attribute_name in pairs(recording) do
+        player[attribute_name] = 0
+    end
 
-	-- loading file
-	load_recording()
-	print("Playback recording", #recording.inputs, "frames")
+    -- loading file
+    load_recording()
+    print("Playback recording", #recording.inputs, "frames")
 
 	-- luacheck: globals playdate.getCurrentTimeMilliseconds
-	playdate.getCurrentTimeMilliseconds = function() return get_next("getCurrentTimeMilliseconds") end
+    playdate.getCurrentTimeMilliseconds = function() return get_next("getCurrentTimeMilliseconds") end
 
 	-- luacheck: globals playdate.getTime
-	playdate.getTime = function() return get_next( "getTime" ) end
+    playdate.getTime = function() return get_next( "getTime" ) end
 
 	-- luacheck: globals playdate.getSecondsSinceEpoch
-	playdate.getSecondsSinceEpoch = function() return get_next( "getSecondsSinceEpoch" ) end
+    playdate.getSecondsSinceEpoch = function() return get_next( "getSecondsSinceEpoch" ) end
 
 	-- luacheck: globals playdate.datastore.read
-	playdate.datastore.read = function() return get_next( "read" ) end
+    playdate.datastore.read = function() return get_next( "read" ) end
 
 	-- luacheck: globals math.randomseed
-	math.randomseed = function() og.randomseed(get_next( "randomseed" )) end
+    math.randomseed = function() og.randomseed(get_next( "randomseed" )) end
 
 	-- luacheck: globals math.random
-	math.random = function()
-		return unserialize_number( get_next("random") )
-	end
+    math.random = function()
+        return unserialize_number( get_next("random") )
+    end
 
 	-- luacheck: globals playdate.startAccelerometer
-	playdate.startAccelerometer = function() end
+    playdate.startAccelerometer = function() end
 
 	-- luacheck: globals playdate.stopAccelerometer
-	playdate.stopAccelerometer = function() end
+    playdate.stopAccelerometer = function() end
 else
-	-- we setup the game for recording
-
 	-- luacheck: globals playdate.getCurrentTimeMilliseconds
-	playdate.getCurrentTimeMilliseconds = function()
-		return set_next( "getCurrentTimeMilliseconds", og.getCurrentTimeMilliseconds() )
-	end
-
 	-- luacheck: globals playdate.getTime
-	playdate.getTime = function() return set_next( "getTime", og.getTime() ) end
-
 	-- luacheck: globals playdate.getSecondsSinceEpoch
-	playdate.getSecondsSinceEpoch = function()
-		return set_next_tuple( "getSecondsSinceEpoch", og.getSecondsSinceEpoch() )
-	end
+    -- we setup the game for recording
 
-	playdate.datastore.read = function( ... )
-		local read_content = og.datastoreRead(...)
-		set_next( "read", read_content )
-		return read_content
-	end
+    playdate.getCurrentTimeMilliseconds = function()
+        return set_next( "getCurrentTimeMilliseconds", og.getCurrentTimeMilliseconds() )
+    end
 
-	math.randomseed = function( seed )
-		-- TODO: we might have an issue if the seed is a float
-		set_next( "randomseed", seed )
-		return og.randomseed( seed )
-	end
+    playdate.getTime = function() return set_next( "getTime", og.getTime() ) end
 
-	math.random = function(...)
-		local r, n = serialize_number( og.random(...) )
-		set_next( "random", r )
-		return n
-	end
+    playdate.getSecondsSinceEpoch = function()
+        return set_next_tuple( "getSecondsSinceEpoch", og.getSecondsSinceEpoch() )
+    end
 
-	-- we guarantee randomseed is set at least once
-	math.randomseed(playdate.getSecondsSinceEpoch())
+    playdate.datastore.read = function( ... )
+        local read_content = og.datastoreRead(...)
+        set_next( "read", read_content )
+        return read_content
+    end
+
+    math.randomseed = function( seed )
+        -- TODO: we might have an issue if the seed is a float
+        set_next( "randomseed", seed )
+        return og.randomseed( seed )
+    end
+
+    math.random = function(...)
+        local r, n = serialize_number( og.random(...) )
+        set_next( "random", r )
+        return n
+    end
+
+    -- we guarantee randomseed is set at least once
+    math.randomseed(playdate.getSecondsSinceEpoch())
 end
 
 -- common input functions (Buttons)
 playdate.buttonIsPressed = function( b )	-- luacheck: globals playdate.buttonIsPressed
-	local buttons_state = recording.inputs[player.frame][1]
-	return (buttons_state&b)>0
+    local buttons_state = recording.inputs[player.frame][1]
+    return (buttons_state&b)>0
 end
 
 playdate.buttonJustPressed = function( b )	-- luacheck: globals playdate.buttonJustPressed
-	if player.frame==1 then return false end
-	local buttons_state = recording.inputs[player.frame][1]
-	local prev_buttons_state = recording.inputs[player.frame-1][1]
-	return ((buttons_state&b)>0) and ((prev_buttons_state&b)==0)
+playdate.buttonJustPressed = function( b )
+    if player.frame==1 then return false end
+    local buttons_state = recording.inputs[player.frame][1]
+    local prev_buttons_state = recording.inputs[player.frame-1][1]
+    return ((buttons_state&b)>0) and ((prev_buttons_state&b)==0)
 end
 
 playdate.buttonJustReleased = function( b )	-- luacheck: globals playdate.buttonJustReleased
-	if player.frame==1 then return false end
-	local buttons_state = recording.inputs[player.frame][1]
-	local prev_buttons_state = recording.inputs[player.frame-1][1]
-	return ((buttons_state&b)==0) and ((prev_buttons_state&b)>0)
+    if player.frame==1 then return false end
+    local buttons_state = recording.inputs[player.frame][1]
+    local prev_buttons_state = recording.inputs[player.frame-1][1]
+    return ((buttons_state&b)==0) and ((prev_buttons_state&b)>0)
 end
 
 -- common crank functions
 
 -- luacheck: globals playdate.isCrankDocked
-playdate.isCrankDocked = function()	return frame_input.isCrankDocked end
 -- luacheck: globals playdate.getCrankPosition
+playdate.isCrankDocked = function()    return frame_input.isCrankDocked end
 playdate.getCrankPosition = function() return frame_input.crankPos end
 -- luacheck: globals playdate.getCrankChange
 playdate.getCrankChange = function() return frame_input.crankeDelta, frame_input.crankAcc end
@@ -334,180 +334,180 @@ playdate.accelerometerIsRunning = function() return frame_input.accRunning end
 playdate.readAccelerometer = function() return table.unpack( frame_input.accData ) end
 
 local function save_input_frame()
-	-- Pack inputs to save
-	local save_struct = {}
+    -- Pack inputs to save
+    local save_struct = {}
 
-	-- compute button state
-	local buttons = 0
-	if og.buttonIsPressed(playdate.kButtonA)		then buttons = buttons | playdate.kButtonA end
-	if og.buttonIsPressed(playdate.kButtonB)		then buttons = buttons | playdate.kButtonB end
-	if og.buttonIsPressed(playdate.kButtonUp)		then buttons = buttons | playdate.kButtonUp end
-	if og.buttonIsPressed(playdate.kButtonDown)		then buttons = buttons | playdate.kButtonDown end
-	if og.buttonIsPressed(playdate.kButtonLeft)		then buttons = buttons | playdate.kButtonLeft end
-	if og.buttonIsPressed(playdate.kButtonRight)	then buttons = buttons | playdate.kButtonRight end
-	frame_input.buttons = buttons
-	table.insert(save_struct, frame_input.buttons )
+    -- compute button state
+    local buttons = 0
+    if og.buttonIsPressed(playdate.kButtonA)        then buttons = buttons | playdate.kButtonA end
+    if og.buttonIsPressed(playdate.kButtonB)        then buttons = buttons | playdate.kButtonB end
+    if og.buttonIsPressed(playdate.kButtonUp)        then buttons = buttons | playdate.kButtonUp end
+    if og.buttonIsPressed(playdate.kButtonDown)        then buttons = buttons | playdate.kButtonDown end
+    if og.buttonIsPressed(playdate.kButtonLeft)        then buttons = buttons | playdate.kButtonLeft end
+    if og.buttonIsPressed(playdate.kButtonRight)    then buttons = buttons | playdate.kButtonRight end
+    frame_input.buttons = buttons
+    table.insert(save_struct, frame_input.buttons )
 
-	-- compute crank
-	frame_input.isCrankDocked = og.isCrankDocked()
-	table.insert(save_struct, frame_input.isCrankDocked )
+    -- compute crank
+    frame_input.isCrankDocked = og.isCrankDocked()
+    table.insert(save_struct, frame_input.isCrankDocked )
 
-	if frame_input.isCrankDocked then
-		frame_input.crankPos = 0
-		frame_input.crankeDelta = 0
-		frame_input.crankAcc = 0
-	else
-		local serialized
+    if frame_input.isCrankDocked then
+        frame_input.crankPos = 0
+        frame_input.crankeDelta = 0
+        frame_input.crankAcc = 0
+    else
+        local serialized
 
-		frame_input.crankPos = og.getCrankPosition()
-		frame_input.crankeDelta, frame_input.crankAcc = og.getCrankChange()
+        frame_input.crankPos = og.getCrankPosition()
+        frame_input.crankeDelta, frame_input.crankAcc = og.getCrankChange()
 
-		serialized, frame_input.crankPos = serialize_number( frame_input.crankPos )
-		table.insert(save_struct, serialized )
+        serialized, frame_input.crankPos = serialize_number( frame_input.crankPos )
+        table.insert(save_struct, serialized )
 
-		serialized, frame_input.crankeDelta = serialize_number( frame_input.crankeDelta )
-		table.insert(save_struct, serialized )
+        serialized, frame_input.crankeDelta = serialize_number( frame_input.crankeDelta )
+        table.insert(save_struct, serialized )
 
-		serialized, frame_input.crankAcc = serialize_number( frame_input.crankAcc )
-		table.insert(save_struct, serialized )
-	end
+        serialized, frame_input.crankAcc = serialize_number( frame_input.crankAcc )
+        table.insert(save_struct, serialized )
+    end
 
-	-- compute accelerometer
-	frame_input.accRunning = og.accelerometerIsRunning()
-	table.insert(save_struct, frame_input.accRunning )
+    -- compute accelerometer
+    frame_input.accRunning = og.accelerometerIsRunning()
+    table.insert(save_struct, frame_input.accRunning )
 
-	if frame_input.accRunning then
-		local serialized
-		local x, y, z = og.readAccelerometer()
+    if frame_input.accRunning then
+        local serialized
+        local x, y, z = og.readAccelerometer()
 
-		serialized, x = serialize_number( x )
-		table.insert(save_struct, serialized )
+        serialized, x = serialize_number( x )
+        table.insert(save_struct, serialized )
 
-		serialized, y = serialize_number( y )
-		table.insert(save_struct, serialized )
+        serialized, y = serialize_number( y )
+        table.insert(save_struct, serialized )
 
-		serialized, z = serialize_number( z )
-		table.insert(save_struct, serialized )
+        serialized, z = serialize_number( z )
+        table.insert(save_struct, serialized )
 
-		frame_input.accData[1] = x
-		frame_input.accData[2] = y
-		frame_input.accData[3] = z
-	else
-		frame_input.accData[1] = 0
-		frame_input.accData[2] = 0
-		frame_input.accData[3] = 0
-	end
+        frame_input.accData[1] = x
+        frame_input.accData[2] = y
+        frame_input.accData[3] = z
+    else
+        frame_input.accData[1] = 0
+        frame_input.accData[2] = 0
+        frame_input.accData[3] = 0
+    end
 
-	-- save the inputs
-	set_next("inputs", save_struct)
+    -- save the inputs
+    set_next("inputs", save_struct)
 end
 
 local function load_input_frame()
-	local inputs_struct = recording.inputs[player.frame]
-	local index = 0
-	local read_next_input = function()
-		index = index + 1
-		return inputs_struct[index]
-	end
+    local inputs_struct = recording.inputs[player.frame]
+    local index = 0
+    local read_next_input = function()
+        index = index + 1
+        return inputs_struct[index]
+    end
 
-	-- read buttons
-	frame_input.buttons = read_next_input()
+    -- read buttons
+    frame_input.buttons = read_next_input()
 
-	-- read crank
-	frame_input.isCrankDocked = read_next_input()
+    -- read crank
+    frame_input.isCrankDocked = read_next_input()
 
-	if frame_input.isCrankDocked then
-		frame_input.crankPos = 0
-		frame_input.crankeDelta = 0
-		frame_input.crankAcc = 0
-	else
-		frame_input.crankPos = unserialize_number( read_next_input() )
-		frame_input.crankeDelta = unserialize_number( read_next_input() )
-		frame_input.crankAcc = unserialize_number( read_next_input() )
-	end
+    if frame_input.isCrankDocked then
+        frame_input.crankPos = 0
+        frame_input.crankeDelta = 0
+        frame_input.crankAcc = 0
+    else
+        frame_input.crankPos = unserialize_number( read_next_input() )
+        frame_input.crankeDelta = unserialize_number( read_next_input() )
+        frame_input.crankAcc = unserialize_number( read_next_input() )
+    end
 
-	frame_input.accRunning = read_next_input()
+    frame_input.accRunning = read_next_input()
 
-	if frame_input.accRunning then
-		frame_input.accData[1] = unserialize_number( read_next_input() )
-		frame_input.accData[2] = unserialize_number( read_next_input() )
-		frame_input.accData[3] = unserialize_number( read_next_input() )
-	else
-		frame_input.accData[1] = 0
-		frame_input.accData[2] = 0
-		frame_input.accData[3] = 0
-	end
+    if frame_input.accRunning then
+        frame_input.accData[1] = unserialize_number( read_next_input() )
+        frame_input.accData[2] = unserialize_number( read_next_input() )
+        frame_input.accData[3] = unserialize_number( read_next_input() )
+    else
+        frame_input.accData[1] = 0
+        frame_input.accData[2] = 0
+        frame_input.accData[3] = 0
+    end
 end
 
 local function playback_frame()
-	player.frame = player.frame + 1
+    player.frame = player.frame + 1
 
-	if not recording.inputs[player.frame] then
-		reached_end_of_recording()
-		return
-	end
+    if not recording.inputs[player.frame] then
+        reached_end_of_recording()
+        return
+    end
 
-	-- load inputs for this frame
-	load_input_frame()
+    -- load inputs for this frame
+    load_input_frame()
 
-	-- call original playdate.update()
-	og.update()
+    -- call original playdate.update()
+    og.update()
 end
 
 
 -- function to call at the end of main.lua
 -- used to overload user callbacks like playdate.update()
 function pdutility.debug.betamax.eof( frame_jump )
-	og.update = playdate.update
-	og.gameWillPause = playdate.gameWillPause
-	og.gameWillTerminate = playdate.gameWillTerminate
+    og.update = playdate.update
+    og.gameWillPause = playdate.gameWillPause
+    og.gameWillTerminate = playdate.gameWillTerminate
 
-	-- playback update
-	if is_playback then
-		playdate.update = function()
-			if og.buttonIsPressed(playdate.kButtonRight) then
-				for _ = 1, 10 do
-					playback_frame()
-				end
-			else
-				playback_frame()
-			end
-		end
+    -- playback update
+    if is_playback then
+        playdate.update = function()
+            if og.buttonIsPressed(playdate.kButtonRight) then
+                for _ = 1, 10 do
+                    playback_frame()
+                end
+            else
+                playback_frame()
+            end
+        end
 
-	-- recording update
-	else
-		playdate.update = function()
-			-- process and save current inputs
-			save_input_frame()
+    -- recording update
+    else
+        playdate.update = function()
+            -- process and save current inputs
+            save_input_frame()
 
-			player.frame = #recording.inputs
+            player.frame = #recording.inputs
 
-			-- call original playdate.update()
-			og.update()
-		end
+            -- call original playdate.update()
+            og.update()
+        end
 
-		playdate.gameWillPause = function()
-			save_recording()
-			og.gameWillPause()
-		end
-	end
+        playdate.gameWillPause = function()
+            save_recording()
+            og.gameWillPause()
+        end
+    end
 
-	-- fast forward
-	if is_playback and frame_jump then
-		if frame_jump<0 then
-			frame_jump = (#recording.inputs) + frame_jump
-		end
+    -- fast forward
+    if is_playback and frame_jump then
+        if frame_jump<0 then
+            frame_jump = (#recording.inputs) + frame_jump
+        end
 
-		frame_jump = pdutility.math.clamp(frame_jump, 1, #recording.inputs)
+        frame_jump = math.clamp(frame_jump, 1, #recording.inputs)
 
-		print("jump to:", frame_jump)
+        print("jump to:", frame_jump)
 
-		while ( player.frame~=frame_jump ) do
-			playdate.update()
-		end
-	end
+        while ( player.frame~=frame_jump ) do
+            playdate.update()
+        end
+    end
 end
 
 function pdutility.debug.betamax.printFrame()
-	print("Betamax current frame:", player.frame)
+    print("Betamax current frame:", player.frame)
 end

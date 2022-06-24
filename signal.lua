@@ -24,7 +24,6 @@
 --  SOFTWARE.
 --
 
-
 -- signal - A Lua class for subscribing to keys and notifying subscribers of that key.
 -- Example:
 --  -- ... creating a global variable in main ...
@@ -49,41 +48,41 @@ class("signal", { }, pdutility.utils).extends()
 function pdutility.utils.signal:init()
 	pdutility.utils.signal.super.init()
 
-	self.listeners = {}
+    self.listeners = {}
 end
 
 function pdutility.utils.signal:subscribe(key, bind, fn)
-	local t = self.listeners[key]
-	local v = {fn = fn, bind = bind}
-	if not t then
-		self.listeners[key] = {v}
-	else
-		t[#t + 1] = v
-	end
-	return fn
+    local t = self.listeners[key]
+    local v = {fn = fn, bind = bind}
+    if not t then
+        self.listeners[key] = {v}
+    else
+        t[#t + 1] = v
+    end
+    return fn
 end
 
 function pdutility.utils.signal:unsubscribe(key, fn)
-	local t = self.listeners[key]
-	if t then
-		for i, v in ipairs(t) do
-			if v.fn == fn then
-				table.remove(t, i)
-				break
-			end
-		end
+    local t = self.listeners[key]
+    if t then
+        for i, v in ipairs(t) do
+            if v.fn == fn then
+                table.remove(t, i)
+                break
+            end
+        end
 
-		if #t == 0 then
-			self.listeners[key] = nil
-		end
-	end
+        if #t == 0 then
+            self.listeners[key] = nil
+        end
+    end
 end
 
 function pdutility.utils.signal:notify(key, ...)
-	local t = self.listeners[key]
-	if t then
-		for _, v in ipairs(t) do
-			v.fn(v.bind, key, ...)
-		end
-	end
+    local t = self.listeners[key]
+    if t then
+        for _, v in ipairs(t) do
+            v.fn(v.bind, key, ...)
+        end
+    end
 end

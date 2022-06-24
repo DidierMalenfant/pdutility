@@ -37,4 +37,4 @@ UDEFS := $(UDEFS) -DPDUTILITY_VERSION=$(PDUTILITY_VERSION)
 
 # -- Add our source files.
 SRC := $(SRC) \
-	   $(_RELATIVE_DIR)/pdutility/pdutility.c
+       $(_RELATIVE_DIR)/pdutility/pdutility.c

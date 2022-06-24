@@ -26,21 +26,21 @@
 
 -- I just declare my layer list at launch:
 -- layers = enum({
--- 	 "background",
--- 	 "enemies",
---	 "player",
---	 "clouds"
+--      "background",
+--      "enemies",
+--     "player",
+--     "clouds"
 -- })
 -- and just use to setup my sprites
 -- sprite:setZIndex(layer.player)
 
 -- luacheck: globals enum
 function enum( t )
-	local result = {}
+    local result = {}
 
-	for index, name in pairs(t) do
-		result[name] = index
-	end
+    for index, name in pairs(t) do
+        result[name] = index
+    end
 
-	return result
+    return result
 end

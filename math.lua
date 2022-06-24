@@ -28,79 +28,79 @@ math = math or {}		-- luacheck: globals math
 
 -- luacheck: globals math.clamp
 function math.clamp(a, min, max)
-	if min > max then
-		min, max = max, min
-	end
+    if min > max then
+        min, max = max, min
+    end
 
-	return math.max(min, math.min(max, a))
+    return math.max(min, math.min(max, a))
 end
 
 -- luacheck: globals math.ring
 function math.ring(a, min, max)
-	if min > max then
-		min, max = max, min
-	end
+    if min > max then
+        min, max = max, min
+    end
 
-	return min + (a-min)%(max-min)
+    return min + (a-min)%(max-min)
 end
 
 -- Like clamp but instead of clamping it loop back to the start.
 -- Useful to cycle through values, for example an index in a menu.
 -- luacheck: globals math.ring_int
 function math.ring_int(a, min, max)
-	return math.ring(a, min, max+1)
+    return math.ring(a, min, max+1)
 end
 
 -- luacheck: globals math.approach
 function math.approach(value, target, step)
-	if value==target then
-		return value, true
-	end
+    if value==target then
+        return value, true
+    end
 
-	local d = target-value
-	if d>0 then
-		value = value + step
-		if value >= target then
-			return target, true
-		else
-			return value, false
-		end
-	elseif d<0 then
-		value = value - step
-		if value <= target then
-			return target, true
-		else
-			return value, false
-		end
-	else
-		return value, true
-	end
+    local d = target-value
+    if d>0 then
+        value = value + step
+        if value >= target then
+            return target, true
+        else
+            return value, false
+        end
+    elseif d<0 then
+        value = value - step
+        if value <= target then
+            return target, true
+        else
+            return value, false
+        end
+    else
+        return value, true
+    end
 end
 
 -- luacheck: globals math.infinite_approach
 function math.infinite_approach(at_zero, at_infinite, x_halfway, x)
-	return at_infinite - (at_infinite-at_zero)*0.5^(x/x_halfway)
+    return at_infinite - (at_infinite-at_zero)*0.5^(x/x_halfway)
 end
 
 -- from http://lua-users.org/wiki/SimpleRound
 -- rounds v to the number of places in bracket, i.e. 0.01, 0.1, 1, 10, etc
 -- luacheck: globals math.round
 function math.round(v, bracket)
-	bracket = bracket or 1
+    bracket = bracket or 1
 
-	-- path for additional precision
-	if bracket < 1 then
-		bracket = 1 // bracket
-		local half = (v >= 0 and 0.5) or -0.5
-		return (v * bracket + half) // 1 / bracket
-	end
+    -- path for additional precision
+    if bracket < 1 then
+        bracket = 1 // bracket
+        local half = (v >= 0 and 0.5) or -0.5
+        return (v * bracket + half) // 1 / bracket
+    end
 
-	local half = (v >= 0 and bracket / 2) or -bracket / 2
+    local half = (v >= 0 and bracket / 2) or -bracket / 2
 
-	return ((v + half) // bracket) * bracket
+    return ((v + half) // bracket) * bracket
 end
 
 -- luacheck: globals math.sign
 function math.sign(v)
-	return (v >= 0 and 1) or -1
+    return (v >= 0 and 1) or -1
 end

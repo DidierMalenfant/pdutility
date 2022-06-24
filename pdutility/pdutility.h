@@ -33,11 +33,11 @@ extern PlaydateAPI* pd;
 
 // -- Utility macros
 #ifndef PD_ALLOC
-#define PD_ALLOC(size) 			pd->system->realloc(NULL, (size))
+#define PD_ALLOC(size)           pd->system->realloc(NULL, (size))
 #endif
 
 #ifndef PD_FREE
-#define PD_FREE(mem) 			pd->system->realloc((mem), 0)
+#define PD_FREE(mem)             pd->system->realloc((mem), 0)
 #endif
 
 #ifndef PD_LOG

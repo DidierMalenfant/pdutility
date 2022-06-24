@@ -45,90 +45,90 @@ class("animatedImage", { }, pdutility.graphics).extends()
 function pdutility.graphics.animatedImage:init(image_table_path, options)
 	pdutility.graphics.animatedImage.super.init()
 
-	options = options or {}
+    options = options or {}
 
-	self.image_table = gfx.imagetable.new(image_table_path)
-	if self.image_table == nil then
-		print("ANIMATEDIMAGE: FAILED TO LOAD IMAGE TABLE AT", image_table_path)
-		return nil
-	end
+    self.image_table = gfx.imagetable.new(image_table_path)
+    if self.image_table == nil then
+        print("ANIMATEDIMAGE: FAILED TO LOAD IMAGE TABLE AT", image_table_path)
+        return nil
+    end
 
-	if options.sequence ~= nil then
-		local temp_imagetable = gfx.imagetable.new(#options.sequence)
+    if options.sequence ~= nil then
+        local temp_imagetable = gfx.imagetable.new(#options.sequence)
 
-		for i, v in ipairs(options.sequence) do
-			temp_imagetable:setImage(i, self.image_table:getImage(v))
-		end
+        for i, v in ipairs(options.sequence) do
+            temp_imagetable:setImage(i, self.image_table:getImage(v))
+        end
 
-		self.image_table = temp_imagetable
-	end
+        self.image_table = temp_imagetable
+    end
 
-	self.animation_loop = anim.loop.new(options.delay or 100, self.image_table, options.loop and true or false)
-	self.animation_loop.paused = options.paused and true or false
-	self.animation_loop.startFrame = options.first or 1
-	self.animation_loop.endFrame = options.last or self.image_table:getLength()
+    self.animation_loop = anim.loop.new(options.delay or 100, self.image_table, options.loop and true or false)
+    self.animation_loop.paused = options.paused and true or false
+    self.animation_loop.startFrame = options.first or 1
+    self.animation_loop.endFrame = options.last or self.image_table:getLength()
 end
 
 function pdutility.graphics.animatedImage:reset()
-	self.loop.frame = 1
+    self.loop.frame = 1
 end
 
 function pdutility.graphics.animatedImage:setDelay(delay)
-	self.loop.delay = delay
+    self.loop.delay = delay
 end
 
 function pdutility.graphics.animatedImage:getDelay()
-	return self.loop.delay
+    return self.loop.delay
 end
 
 function pdutility.graphics.animatedImage:setShouldLoop(should_loop)
-	self.loop.shouldLoop = should_loop
+    self.loop.shouldLoop = should_loop
 end
 
 function pdutility.graphics.animatedImage:getShouldLoop()
-	return self.loop.shouldLoop
+    return self.loop.shouldLoop
 end
 
 function pdutility.graphics.animatedImage:setPaused(paused)
-	self.loop.paused = paused
+    self.loop.paused = paused
 end
 
 function pdutility.graphics.animatedImage:getPaused()
-	return self.loop.paused
+    return self.loop.paused
 end
 
 function pdutility.graphics.animatedImage:setFrame(frame)
-	self.loop.frame = frame
+    self.loop.frame = frame
 end
 
 function pdutility.graphics.animatedImage:getFrame()
-	return self.loop.frame
+    return self.loop.frame
 end
 
 function pdutility.graphics.animatedImage:setFirstFrame(frame)
-	self.loop.startFrame = frame
+    self.loop.startFrame = frame
 end
 
 function pdutility.graphics.animatedImage:setLastFrame(frame)
-	self.loop.endFrame = frame
+    self.loop.endFrame = frame
 end
 
 pdutility.graphics.animatedImage.__index = function(animated_image, key)
-	local proxy_value = rawget(pdutility.graphics.animatedImage, key)
-	if proxy_value then
-		return proxy_value
-	end
+    local proxy_value = rawget(pdutility.graphics.animatedImage, key)
+    if proxy_value then
+        return proxy_value
+    end
 
-	proxy_value = animated_image.image_table:getImage(animated_image.loop.frame)[key]
+    proxy_value = animated_image.image_table:getImage(animated_image.loop.frame)[key]
 
-	if type(proxy_value) == "function" then
-		rawset(animated_image, key, function(ai, ...)
-			local img = ai.image_table:getImage(ai.loop.frame)
-			return img[key](img, ...)
-		end)
+    if type(proxy_value) == "function" then
+        rawset(animated_image, key, function(ai, ...)
+            local img = ai.image_table:getImage(ai.loop.frame)
+            return img[key](img, ...)
+        end)
 
-		return animated_image[key]
-	end
+        return animated_image[key]
+    end
 
-	return proxy_value
+    return proxy_value
 end

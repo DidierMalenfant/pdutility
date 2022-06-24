@@ -28,20 +28,20 @@ table = table or {}		-- luacheck: globals table
 
 -- luacheck: globals table.random
 function table.random(t)
-	if type(t) ~= "table" then return nil end
+    if type(t) ~= "table" then return nil end
 
-	return t[math.ceil(math.random(#t))]
+    return t[math.ceil(math.random(#t))]
 end
 
 -- luacheck: globals table.each
 function table.each(t, funct)
-	if type(funct)~="function" then
-		return
-	end
+    if type(funct)~="function" then
+        return
+    end
 
-	for _, e in pairs(t) do
-		funct(e)
-	end
+    for _, e in pairs(t) do
+        funct(e)
+    end
 end
 
 -- from https://stackoverflow.com/a/21287623/28290
@@ -56,15 +56,15 @@ end
 
 -- luacheck: globals table.newAutotable
 function table.newAutotable(dim)
-	local MT = {};
-	for i=1, dim do
-		MT[i] = {__index = function(t, k)
-			if i < dim then
-				t[k] = setmetatable({}, MT[i+1])
-				return t[k];
-			end
-		end}
-	end
+    local MT = {};
+    for i=1, dim do
+        MT[i] = {__index = function(t, k)
+            if i < dim then
+                t[k] = setmetatable({}, MT[i+1])
+                return t[k];
+            end
+        end}
+    end
 
-	return setmetatable({}, MT[1]);
+    return setmetatable({}, MT[1]);
 end
