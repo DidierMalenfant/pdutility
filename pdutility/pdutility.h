@@ -41,15 +41,15 @@ extern PlaydateAPI* pd;
 #endif
 
 #ifndef PD_LOG
-    #if 0
         #define PD_LOG(format, ...)         pd->system->logToConsole((s), ##__VA_ARGS__)
+    #ifdef PD_LOG_ENABLE
     #else
         #define PD_LOG(format, args...)     do { } while(0)
     #endif
 #endif
 
 #ifndef PD_DBG_LOG
-    #if 0
+    #ifdef PD_DBG_LOG_ENABLE
         #define PD_DBG_LOG                  PD_LOG
     #else
         #define PD_DBG_LOG(format, args...) do { } while(0)
