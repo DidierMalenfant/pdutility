@@ -35,22 +35,22 @@ pdutility.animation = pdutility.animation or {}
 class to create simple animations using easing as building blocks
 
 To create a simple sequence:
-    animation = sequence.new():from(0):to(1,2.0,"soft-out"):mirror()
+    animation = sequence.new():from(0):to(1,2.0,'soft-out'):mirror()
 
     currentValue = animation:get()
 
 ]]--
 
--- pick_anim_x = sequence.new():from(150):sleep(0.4):to(50, 0.3, "outCirc"):to(0, 0.5, "outExpo")
--- pick_anim_y = sequence.new():from(-240):sleep(0.4):to(0, 0.3, "inQuad"
---                             :to(-30, 0.2, "outBack"):to(0, 0.5, "outBounce")
+-- pick_anim_x = sequence.new():from(150):sleep(0.4):to(50, 0.3, 'outCirc'):to(0, 0.5, 'outExpo')
+-- pick_anim_y = sequence.new():from(-240):sleep(0.4):to(0, 0.3, 'inQuad'
+--                             :to(-30, 0.2, 'outBack'):to(0, 0.5, 'outBounce')
 
--- pack_anim_x = sequence.new():from(150):sleep(0.2):to(50, 0.3, "outCirc"):to(0, 0.2, "outExpo"):start()
--- pack_anim_y = sequence.new():from(-240):sleep(0.2):to(0, 0.3, "inQuad")
---                             :to(-30, 0.2, "outBack"):to(0, 0.5, "outBounce")
+-- pack_anim_x = sequence.new():from(150):sleep(0.2):to(50, 0.3, 'outCirc'):to(0, 0.2, 'outExpo'):start()
+-- pack_anim_y = sequence.new():from(-240):sleep(0.2):to(0, 0.3, 'inQuad')
+--                             :to(-30, 0.2, 'outBack'):to(0, 0.5, 'outBounce')
 
 -- pup_anim_x = sequence.new()
--- pup_anim_y = sequence.new():from(-240):to(0, 0.5, "outBack")
+-- pup_anim_y = sequence.new():from(-240):to(0, 0.5, 'outBack')
 
 -- TODO
 --    :callback(fn,...)
@@ -111,7 +111,7 @@ function pdutility.animation.sequence.update()
 end
 
 function pdutility.animation.sequence.print()
-    print("Sequences running:", #_runningSequences)
+    print('Sequences running:', #_runningSequences)
 end
 
 function pdutility.animation.sequence:clear()
@@ -154,7 +154,7 @@ function pdutility.animation.sequence:to(to, duration, easingFunction, ...)
     to = to or 0
     duration = duration or 0
     easingFunction = easingFunction or _easings.inOutQuad
-    if type(easingFunction)=="string" then
+    if type(easingFunction)=='string' then
         easingFunction = _easings[easingFunction] or _easings.inOutQuad
     end
 
@@ -251,12 +251,12 @@ function pdutility.animation.sequence:sleep( duration )
 end
 
 function pdutility.animation.sequence:loop()
-    self.loop = "loop"
+    self.loop = 'loop'
     return self
 end
 
 function pdutility.animation.sequence:mirror()
-    self.loop = "mirror"
+    self.loop = 'mirror'
     return self
 end
 
@@ -286,7 +286,7 @@ end
 
 function pdutility.animation.sequence:getEasingByTime( clampedTime )
     if self:isEmpty() then
-        print("sequence warning: empty animation")
+        print('sequence warning: empty animation')
         return nil
     end
 
@@ -306,7 +306,7 @@ function pdutility.animation.sequence:getEasingByTime( clampedTime )
     end
 
     -- we didn't the correct part
-    print("sequence warning: couldn't find sequence part. clampedTime probably out of bound.",
+    print('sequence warning: couldn\'t find sequence part. clampedTime probably out of bound.',
            clampedTime, self.duration)
     return self.easings[1]
 end
@@ -344,11 +344,11 @@ function pdutility.animation.sequence:getClampedTime( time )
     time = time or self.time
 
     -- time is looped
-    if self.loop=="loop" then
+    if self.loop=='loop' then
         return time%self.duration
 
     -- time is mirrored / yoyo
-    elseif self.loop=="mirror" then
+    elseif self.loop=='mirror' then
         time = time%(self.duration*2)
         if time>self.duration then
             time = self.duration + self.duration - time

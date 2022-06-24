@@ -170,7 +170,7 @@ end
 
 -- when we run out of data, we just quit the game
 local function reached_end_of_recording()
-    print("End of recording")
+    print('End of recording')
     playdate.exit()
 end
 
@@ -203,14 +203,14 @@ local function set_next_tuple( attribute_name, ... )
 end
 
 local function save_recording()
-    playdate.datastore.write(recording, "betamax_recording")
-    print("Recording Saved -", #recording.inputs, "frames")
+    playdate.datastore.write(recording, 'betamax_recording')
+    print('Recording Saved -', #recording.inputs, 'frames')
 end
 
 local function load_recording()
-    recording = playdate.datastore.read("betamax_recording")
+    recording = playdate.datastore.read('betamax_recording')
     if not recording then
-        print("Betamax Error: Couldn't load any recording")
+        print('Betamax Error: Couldn\'t load any recording')
     end
 end
 
@@ -230,20 +230,20 @@ if is_playback then
 
     -- loading file
     load_recording()
-    print("Playback recording", #recording.inputs, "frames")
+    print('Playback recording', #recording.inputs, 'frames')
 
-    playdate.getCurrentTimeMilliseconds = function() return get_next("getCurrentTimeMilliseconds") end
+    playdate.getCurrentTimeMilliseconds = function() return get_next('getCurrentTimeMilliseconds') end
 
-    playdate.getTime = function() return get_next( "getTime" ) end
+    playdate.getTime = function() return get_next( 'getTime' ) end
 
-    playdate.getSecondsSinceEpoch = function() return get_next( "getSecondsSinceEpoch" ) end
+    playdate.getSecondsSinceEpoch = function() return get_next( 'getSecondsSinceEpoch' ) end
 
-    playdate.datastore.read = function() return get_next( "read" ) end
+    playdate.datastore.read = function() return get_next( 'read' ) end
 
-    math.randomseed = function() og.randomseed(get_next( "randomseed" )) end
+    math.randomseed = function() og.randomseed(get_next( 'randomseed' )) end
 
     math.random = function()
-        return unserialize_number( get_next("random") )
+        return unserialize_number( get_next('random') )
     end
 
     playdate.startAccelerometer = function() end
@@ -253,30 +253,30 @@ else
     -- we setup the game for recording
 
     playdate.getCurrentTimeMilliseconds = function()
-        return set_next( "getCurrentTimeMilliseconds", og.getCurrentTimeMilliseconds() )
+        return set_next( 'getCurrentTimeMilliseconds', og.getCurrentTimeMilliseconds() )
     end
 
-    playdate.getTime = function() return set_next( "getTime", og.getTime() ) end
+    playdate.getTime = function() return set_next( 'getTime', og.getTime() ) end
 
     playdate.getSecondsSinceEpoch = function()
-        return set_next_tuple( "getSecondsSinceEpoch", og.getSecondsSinceEpoch() )
+        return set_next_tuple( 'getSecondsSinceEpoch', og.getSecondsSinceEpoch() )
     end
 
     playdate.datastore.read = function( ... )
         local read_content = og.datastoreRead(...)
-        set_next( "read", read_content )
+        set_next( 'read', read_content )
         return read_content
     end
 
     math.randomseed = function( seed )
         -- TODO: we might have an issue if the seed is a float
-        set_next( "randomseed", seed )
+        set_next( 'randomseed', seed )
         return og.randomseed( seed )
     end
 
     math.random = function(...)
         local r, n = serialize_number( og.random(...) )
-        set_next( "random", r )
+        set_next( 'random', r )
         return n
     end
 
@@ -380,7 +380,7 @@ local function save_input_frame()
     end
 
     -- save the inputs
-    set_next("inputs", save_struct)
+    set_next('inputs', save_struct)
 end
 
 local function load_input_frame()
@@ -481,7 +481,7 @@ function pdutility.debug.betamax.eof( frame_jump )
 
         frame_jump = math.clamp(frame_jump, 1, #recording.inputs)
 
-        print("jump to:", frame_jump)
+        print('jump to:', frame_jump)
 
         while ( player.frame~=frame_jump ) do
             playdate.update()
@@ -490,5 +490,5 @@ function pdutility.debug.betamax.eof( frame_jump )
 end
 
 function pdutility.debug.betamax.printFrame()
-    print("Betamax current frame:", player.frame)
+    print('Betamax current frame:', player.frame)
 end

@@ -55,7 +55,7 @@ local allowed_variables = {
     __signal = true
 }
 
-class("state", { }, pdutility.utils).extends()
+class('state', { }, pdutility.utils).extends()
 
 function pdutility.utils.state.new(...)
     return pdutility.utils.state(...)

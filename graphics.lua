@@ -112,13 +112,13 @@ end
 -- end
 function pdutility.graphics.getSvgPaths( svg_filepath )
     local file, file_error = playdate.file.open( svg_filepath, playdate.file.kFileRead )
-    assert(file, "getSvgPaths(), Cannot open file", svg_filepath," (",file_error,")")
+    assert(file, 'getSvgPaths(), Cannot open file', svg_filepath,' (',file_error,')')
 
     local push = table.insert
     local commandArgCount = { M=2, L=2, T=2, H=1, V=1, C=6, S=6, A=7, Z=0}
 
     -- read the whole file
-    local fileContent = ""
+    local fileContent = ''
     repeat
         local line = file:readline()
         if line then
@@ -127,22 +127,22 @@ function pdutility.graphics.getSvgPaths( svg_filepath )
     until not line
 
     local result = table.create( 8 )
-    for path in fileContent:gmatch("<path.-/>") do
+    for path in fileContent:gmatch('<path.-/>') do
         local previousX, previousY = 0, 0
         local newPath = table.create( 8 )
 
-        local name = path:match("id=\"(.-)\"")
+        local name = path:match('id="(.-)"')
         if not name then name = #result + 1 end
         result[name] = newPath
 
-        local d_content = path:match(" d=\"(.-)\"")
-        for command in d_content:gmatch("%a[%-%d%., ]*") do
+        local d_content = path:match(' d="(.-)"')
+        for command in d_content:gmatch('%a[%-%d%., ]*') do
             local first_character = command:sub(1,1)
             local command_letter = first_character:upper()
             local absolute_coordinates = command_letter==first_character
 
             local args = table.create( 6 )
-            for number in command:gmatch("[-%d%.]+") do
+            for number in command:gmatch('[-%d%.]+') do
                 push(args, tonumber(number))
             end
             local argCount = commandArgCount[ command_letter ]
@@ -154,25 +154,25 @@ function pdutility.graphics.getSvgPaths( svg_filepath )
                     relativeX, relativeY = previousX, previousY
                 end
 
-                if command_letter=="M" or command_letter=="L" or command_letter=="T" then
+                if command_letter=='M' or command_letter=='L' or command_letter=='T' then
                     push( newPath, args[argIndex+1] + relativeX)
                     push( newPath, args[argIndex+2] + relativeY)
-                elseif command_letter=="H" then
+                elseif command_letter=='H' then
                     push( newPath, args[argIndex+1] + relativeX)
                     push( newPath, previousY)
-                elseif command_letter=="V" then
+                elseif command_letter=='V' then
                     push( newPath, previousX)
                     push( newPath, args[argIndex+1] + relativeY)
-                elseif command_letter=="C" then
+                elseif command_letter=='C' then
                     push( newPath, args[argIndex+5] + relativeX)
                     push( newPath, args[argIndex+6] + relativeY)
-                elseif command_letter=="S" then
+                elseif command_letter=='S' then
                     push( newPath, args[argIndex+3] + relativeX)
                     push( newPath, args[argIndex+4] + relativeY)
-                elseif command_letter=="A" then
+                elseif command_letter=='A' then
                     push( newPath, args[argIndex+6] + relativeX)
                     push( newPath, args[argIndex+7] + relativeY)
-                elseif command_letter=="Z" then
+                elseif command_letter=='Z' then
                     push( newPath, newPath[1])
                     push( newPath, newPath[2])
                 end
@@ -185,13 +185,13 @@ function pdutility.graphics.getSvgPaths( svg_filepath )
         end
     end
 
-    for rect in fileContent:gmatch("<rect.-/>") do
-        local width = tonumber( rect:match("width=\"([-%d%.]+)\"") )
-        local height = tonumber( rect:match("height=\"([-%d%.]+)\"") )
-        local x = tonumber( rect:match("x=\"([-%d%.]+)\"") )
-        local y = tonumber( rect:match("y=\"([-%d%.]+)\"") )
+    for rect in fileContent:gmatch('<rect.-/>') do
+        local width = tonumber( rect:match('width="([-%d%.]+)"') )
+        local height = tonumber( rect:match('height="([-%d%.]+)"') )
+        local x = tonumber( rect:match('x="([-%d%.]+)"') )
+        local y = tonumber( rect:match('y="([-%d%.]+)"') )
 
-        local name = rect:match("id=\"(.-)\"")
+        local name = rect:match('id="(.-)"')
         if not name then name = #result + 1 end
         result[name] = {
             x, y,

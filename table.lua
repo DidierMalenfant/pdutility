@@ -27,13 +27,13 @@
 table = table or {}
 
 function table.random(t)
-    if type(t) ~= "table" then return nil end
+    if type(t) ~= 'table' then return nil end
 
     return t[math.ceil(math.random(#t))]
 end
 
 function table.each(t, funct)
-    if type(funct)~="function" then
+    if type(funct)~='function' then
         return
     end
 

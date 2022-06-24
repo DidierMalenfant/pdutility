@@ -26,10 +26,10 @@
 
 -- I just declare my layer list at launch:
 -- layers = enum({
---      "background",
---      "enemies",
---     "player",
---     "clouds"
+--     'background',
+--     'enemies',
+--     'player',
+--     'clouds'
 -- })
 -- and just use to setup my sprites
 -- sprite:setZIndex(layer.player)

@@ -41,7 +41,7 @@ function pdutility.debug.showToast(x, y, text, duration)
 end
 
 -- Graphs samples collected/frame against a specified sample duration
-class("sampler", { }, pdutility.debug).extends()
+class('sampler', { }, pdutility.debug).extends()
 
 function pdutility.debug.sampler.new(...)
     return pdutility.debug.sampler(...)
@@ -64,26 +64,26 @@ function pdutility.debug.sampler:reset()
 end
 
 function pdutility.debug.sampler:print()
-    print("")
+    print('')
 
-    print("Sampler Info")
-    print("=================")
-    print("Now: "..self.samples[#self.samples].." KB")
-    print("High Watermark: "..self.high_watermark.." KB")
+    print('Sampler Info')
+    print('=================')
+    print('Now: '..self.samples[#self.samples]..' KB')
+    print('High Watermark: '..self.high_watermark..' KB')
 
     local current_sample_avg = 0
     for _, v in ipairs(self.samples) do
         current_sample_avg += v
     end
     current_sample_avg /= #self.samples
-    print("Average: "..current_sample_avg.." KB")
+    print('Average: '..current_sample_avg..' KB')
 
-    print("Log:")
+    print('Log:')
     for _, v in ipairs(self.samples) do
-        print("\t"..v.." KB")
+        print('\t'..v..' KB')
     end
 
-    print("")
+    print('')
 end
 
 function pdutility.debug.sampler:draw(x, y, width, height)

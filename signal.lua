@@ -30,19 +30,19 @@
 --  NotificationCenter = Signal()
 --
 --  -- ... in code that needs to know when score has changed ...
---  NotificationCenter:subscribe("game_score", self, function(new_score, score_delta)
+--  NotificationCenter:subscribe('game_score', self, function(new_score, score_delta)
 --     self:update_score(new_score)
 --  end)
 --
 --  ... in code that changes the score ...
---  NotificationCenter:notify("game_score", new_score, score_delta)
+--  NotificationCenter:notify('game_score', new_score, score_delta)
 
 import "CoreLibs/object"
 
 pdutility = pdutility or {}
 pdutility.utils = pdutility.utils or {}
 
-class("signal", { }, pdutility.utils).extends()
+class('signal', { }, pdutility.utils).extends()
 
 function pdutility.utils.signal.new(...)
     return pdutility.utils.signal(...)

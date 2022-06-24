@@ -34,7 +34,7 @@ local gfx <const> = playdate.graphics
 local anim <const> = gfx.animation
 
 -- Graphs samples collected/frame against a specified sample duration
-class("animatedImage", { }, pdutility.graphics).extends()
+class('animatedImage', { }, pdutility.graphics).extends()
 
 function pdutility.graphics.animatedImage.new(...)
     return pdutility.graphics.animatedImage(...)
@@ -52,7 +52,7 @@ function pdutility.graphics.animatedImage:init(image_table_path, options)
 
     self.image_table = gfx.imagetable.new(image_table_path)
     if self.image_table == nil then
-        print("ANIMATEDIMAGE: FAILED TO LOAD IMAGE TABLE AT", image_table_path)
+        print('ANIMATEDIMAGE: FAILED TO LOAD IMAGE TABLE AT', image_table_path)
         return nil
     end
 
@@ -124,7 +124,7 @@ pdutility.graphics.animatedImage.__index = function(animated_image, key)
 
     proxy_value = animated_image.image_table:getImage(animated_image.loop.frame)[key]
 
-    if type(proxy_value) == "function" then
+    if type(proxy_value) == 'function' then
         rawset(animated_image, key, function(ai, ...)
             local img = ai.image_table:getImage(ai.loop.frame)
             return img[key](img, ...)
