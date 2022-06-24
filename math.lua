@@ -24,9 +24,8 @@
 --  SOFTWARE.
 --
 
-math = math or {}		-- luacheck: globals math
+math = math or {}
 
--- luacheck: globals math.clamp
 function math.clamp(a, min, max)
     if min > max then
         min, max = max, min
@@ -35,7 +34,6 @@ function math.clamp(a, min, max)
     return math.max(min, math.min(max, a))
 end
 
--- luacheck: globals math.ring
 function math.ring(a, min, max)
     if min > max then
         min, max = max, min
@@ -46,12 +44,10 @@ end
 
 -- Like clamp but instead of clamping it loop back to the start.
 -- Useful to cycle through values, for example an index in a menu.
--- luacheck: globals math.ring_int
 function math.ring_int(a, min, max)
     return math.ring(a, min, max+1)
 end
 
--- luacheck: globals math.approach
 function math.approach(value, target, step)
     if value==target then
         return value, true
@@ -77,14 +73,12 @@ function math.approach(value, target, step)
     end
 end
 
--- luacheck: globals math.infinite_approach
 function math.infinite_approach(at_zero, at_infinite, x_halfway, x)
     return at_infinite - (at_infinite-at_zero)*0.5^(x/x_halfway)
 end
 
 -- from http://lua-users.org/wiki/SimpleRound
 -- rounds v to the number of places in bracket, i.e. 0.01, 0.1, 1, 10, etc
--- luacheck: globals math.round
 function math.round(v, bracket)
     bracket = bracket or 1
 
@@ -100,7 +94,6 @@ function math.round(v, bracket)
     return ((v + half) // bracket) * bracket
 end
 
--- luacheck: globals math.sign
 function math.sign(v)
     return (v >= 0 and 1) or -1
 end

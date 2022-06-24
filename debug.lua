@@ -27,8 +27,8 @@
 import "CoreLibs/graphics"
 import "CoreLibs/object"
 
-pdutility = pdutility or {}					-- luacheck: globals pdutility
-pdutility.debug = pdutility.debug or {}		-- luacheck: globals pdutility.debug
+pdutility = pdutility or {}
+pdutility.debug = pdutility.debug or {}
 
 local gfx <const> = playdate.graphics
 

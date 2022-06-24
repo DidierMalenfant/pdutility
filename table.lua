@@ -24,16 +24,14 @@
 --  SOFTWARE.
 --
 
-table = table or {}		-- luacheck: globals table
+table = table or {}
 
--- luacheck: globals table.random
 function table.random(t)
     if type(t) ~= "table" then return nil end
 
     return t[math.ceil(math.random(#t))]
 end
 
--- luacheck: globals table.each
 function table.each(t, funct)
     if type(funct)~="function" then
         return
@@ -54,7 +52,6 @@ end
 -- print(at[0][1][2]) -- returns value
 -- print(at[0][1][3][3]) -- error, because only 3 dimensions set
 
--- luacheck: globals table.newAutotable
 function table.newAutotable(dim)
     local MT = {};
     for i=1, dim do

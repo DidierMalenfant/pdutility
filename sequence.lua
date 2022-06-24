@@ -28,8 +28,8 @@ import "CoreLibs/easing"
 
 import "math"
 
-pdutility = pdutility or {}							-- luacheck: globals pdutility
-pdutility.animation = pdutility.animation or {}		-- luacheck: globals pdutility.animation
+pdutility = pdutility or {}
+pdutility.animation = pdutility.animation or {}
 
 --[[
 class to create simple animations using easing as building blocks
@@ -56,7 +56,6 @@ To create a simple sequence:
 --    :callback(fn,...)
 
 -- private member
--- luacheck: globals playdate.easingFunctions
 local _easings = playdate.easingFunctions
 if not _easings then
     print('sequence warning: easing function not found. Don\'t forget to call import "CoreLibs/easing"')
@@ -71,8 +70,7 @@ end
 local _runningSequences = table.create(32,0)
 local _previousUpdateTime = playdate.getCurrentTimeMilliseconds()
 
--- luacheck: globals pdutility.animation.sequence
-class("sequence", { }, pdutility.animation).extends()
+class('sequence', { }, pdutility.animation).extends()
 
 pdutility.animation.sequence.__index = pdutility.animation.sequence
 

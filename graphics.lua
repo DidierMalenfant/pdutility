@@ -24,13 +24,12 @@
 --  SOFTWARE.
 --
 
-pdutility = pdutility or {}							-- luacheck: globals pdutility
-pdutility.graphics = pdutility.graphics or {}		-- luacheck: globals pdutility.graphics
+pdutility = pdutility or {}
+pdutility.graphics = pdutility.graphics or {}
 
 local gfx <const> = playdate.graphics
 
 -- Draw an image tiled within bounds with an optional offset
--- luacheck: globals pdutility.graphics.drawTiledImage
 function pdutility.graphics.drawTiledImage(img, bounds, offset_x, offset_y)
     offset_x = offset_x or 0
     offset_y = offset_y or 0
@@ -58,7 +57,6 @@ end
 -- draws a curve starting at x1,y1, ending at x3,y3, with x2,y2 being a control point that "pulls" the curve towards it
 -- steps is the number of line segments to use, lower is better for performance, higher makes your curve look smoother
 -- the playdate is kinda slow, so it's recommended to find a relatively low step number that looks passable enough!
--- luacheck: globals pdutility.graphics.drawQuadraticBezier
 function pdutility.graphics.drawQuadraticBezier(x1, y1, x2, y2, x3, y3, steps)
   steps = steps or 8
   local d = 1 / steps
@@ -79,7 +77,6 @@ end
 -- like Adobe Illustator!) steps is the number of line segments to use, lower is better for performance,
 -- higher makes your curve look smoother the playdate is kinda slow, so it's recommended to find a
 -- relatively low step number that looks passable enough!
--- luacheck: globals pdutility.graphics.drawCubicBezier
 function pdutility.graphics.drawCubicBezier(x1, y1, x2, y2, x3, y3, x4, y4, steps)
   steps = steps or 12
   local d = 1 / steps
@@ -113,7 +110,6 @@ end
 --     12 -- number of line segments used to draw the curve
 -- )
 -- end
--- luacheck: globals pdutility.graphics.getSvgPaths
 function pdutility.graphics.getSvgPaths( svg_filepath )
     local file, file_error = playdate.file.open( svg_filepath, playdate.file.kFileRead )
     assert(file, "getSvgPaths(), Cannot open file", svg_filepath," (",file_error,")")

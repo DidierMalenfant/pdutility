@@ -71,13 +71,10 @@ It can be negative to jump to a frame from the end of the recording (for example
 
 ]]
 
--- luacheck: globals pdutility.math
 import "math"
 
-pdutility = pdutility or {}					-- luacheck: globals pdutility
-pdutility.debug = pdutility.debug or {}		-- luacheck: globals pdutility.debug
-
--- luacheck: globals pdutility.debug.betamax
+pdutility = pdutility or {}
+pdutility.debug = pdutility.debug or {}
 pdutility.debug.betamax = {}
 
 -- save reference to original functions we will replace
@@ -234,35 +231,24 @@ if is_playback then
     load_recording()
     print("Playback recording", #recording.inputs, "frames")
 
-	-- luacheck: globals playdate.getCurrentTimeMilliseconds
     playdate.getCurrentTimeMilliseconds = function() return get_next("getCurrentTimeMilliseconds") end
 
-	-- luacheck: globals playdate.getTime
     playdate.getTime = function() return get_next( "getTime" ) end
 
-	-- luacheck: globals playdate.getSecondsSinceEpoch
     playdate.getSecondsSinceEpoch = function() return get_next( "getSecondsSinceEpoch" ) end
 
-	-- luacheck: globals playdate.datastore.read
     playdate.datastore.read = function() return get_next( "read" ) end
 
-	-- luacheck: globals math.randomseed
     math.randomseed = function() og.randomseed(get_next( "randomseed" )) end
 
-	-- luacheck: globals math.random
     math.random = function()
         return unserialize_number( get_next("random") )
     end
 
-	-- luacheck: globals playdate.startAccelerometer
     playdate.startAccelerometer = function() end
 
-	-- luacheck: globals playdate.stopAccelerometer
     playdate.stopAccelerometer = function() end
 else
-	-- luacheck: globals playdate.getCurrentTimeMilliseconds
-	-- luacheck: globals playdate.getTime
-	-- luacheck: globals playdate.getSecondsSinceEpoch
     -- we setup the game for recording
 
     playdate.getCurrentTimeMilliseconds = function()
@@ -298,12 +284,11 @@ else
 end
 
 -- common input functions (Buttons)
-playdate.buttonIsPressed = function( b )	-- luacheck: globals playdate.buttonIsPressed
+playdate.buttonIsPressed = function( b )
     local buttons_state = recording.inputs[player.frame][1]
     return (buttons_state&b)>0
 end
 
-playdate.buttonJustPressed = function( b )	-- luacheck: globals playdate.buttonJustPressed
 playdate.buttonJustPressed = function( b )
     if player.frame==1 then return false end
     local buttons_state = recording.inputs[player.frame][1]
@@ -311,7 +296,7 @@ playdate.buttonJustPressed = function( b )
     return ((buttons_state&b)>0) and ((prev_buttons_state&b)==0)
 end
 
-playdate.buttonJustReleased = function( b )	-- luacheck: globals playdate.buttonJustReleased
+playdate.buttonJustReleased = function( b )
     if player.frame==1 then return false end
     local buttons_state = recording.inputs[player.frame][1]
     local prev_buttons_state = recording.inputs[player.frame-1][1]
@@ -320,17 +305,12 @@ end
 
 -- common crank functions
 
--- luacheck: globals playdate.isCrankDocked
--- luacheck: globals playdate.getCrankPosition
 playdate.isCrankDocked = function()    return frame_input.isCrankDocked end
 playdate.getCrankPosition = function() return frame_input.crankPos end
--- luacheck: globals playdate.getCrankChange
 playdate.getCrankChange = function() return frame_input.crankeDelta, frame_input.crankAcc end
 
 -- common accelerometer functions
--- luacheck: globals playdate.accelerometerIsRunning
 playdate.accelerometerIsRunning = function() return frame_input.accRunning end
--- luacheck: globals playdate.readAccelerometer
 playdate.readAccelerometer = function() return table.unpack( frame_input.accData ) end
 
 local function save_input_frame()

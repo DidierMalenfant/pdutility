@@ -27,14 +27,13 @@
 import "CoreLibs/animation"
 import "CoreLibs/object"
 
-pdutility = pdutility or {}							-- luacheck: globals pdutility
-pdutility.graphics = pdutility.graphics or {}		-- luacheck: globals pdutility.graphics
+pdutility = pdutility or {}
+pdutility.graphics = pdutility.graphics or {}
 
 local gfx <const> = playdate.graphics
 local anim <const> = gfx.animation
 
 -- Graphs samples collected/frame against a specified sample duration
--- luacheck: globals pdutility.graphics.animatedImage
 class("animatedImage", { }, pdutility.graphics).extends()
 
 -- image_table_path should be a path to an image table.

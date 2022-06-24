@@ -34,7 +34,6 @@
 -- and just use to setup my sprites
 -- sprite:setZIndex(layer.player)
 
--- luacheck: globals enum
 function enum( t )
     local result = {}
 
