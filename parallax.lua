@@ -27,7 +27,7 @@
 import "CoreLibs/graphics"
 import "CoreLibs/object"
 
-import 'math'
+import "math"
 
 pdutility = pdutility or {}
 pdutility.graphics = pdutility.graphics or {}

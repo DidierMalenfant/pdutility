@@ -34,8 +34,8 @@ in main.lua:
     call betamax_eof() at the bottom of main.lua
 
 == Example ==
-import 'betamax'
-import 'CoreLibs/graphics'
+import "betamax"
+import "CoreLibs/graphics"
 
 function playdate.update()
     -- do stuff
