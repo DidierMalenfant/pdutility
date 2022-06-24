@@ -44,6 +44,10 @@ pdutility.utils = pdutility.utils or {}
 
 class("signal", { }, pdutility.utils).extends()
 
+function pdutility.utils.signal.new(...)
+    return pdutility.utils.signal(...)
+end
+
 function pdutility.utils.signal:init()
     pdutility.utils.signal.super.init(self)
 

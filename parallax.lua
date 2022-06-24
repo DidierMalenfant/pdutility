@@ -36,6 +36,10 @@ local gfx <const> = playdate.graphics
 
 class('parallax', { }, pdutility.graphics).extends(gfx.sprite)
 
+function pdutility.graphics.parallax.new(...)
+    return pdutility.graphics.parallax(...)
+end
+
 function pdutility.graphics.parallax:init()
     pdutility.graphics.parallax.super.init(self)
 

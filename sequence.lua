@@ -75,6 +75,10 @@ class('sequence', { }, pdutility.animation).extends()
 pdutility.animation.sequence.__index = pdutility.animation.sequence
 
 -- create a new sequence
+function pdutility.animation.sequence.new(...)
+    return pdutility.animation.sequence(...)
+end
+
 function pdutility.animation.sequence:init()
     pdutility.animation.sequence.super.init(self)
 

@@ -36,6 +36,10 @@ local anim <const> = gfx.animation
 -- Graphs samples collected/frame against a specified sample duration
 class("animatedImage", { }, pdutility.graphics).extends()
 
+function pdutility.graphics.animatedImage.new(...)
+    return pdutility.graphics.animatedImage(...)
+end
+
 -- image_table_path should be a path to an image table.
 -- options is a table of initial settings:
 --   delay:

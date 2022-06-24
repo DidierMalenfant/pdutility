@@ -28,6 +28,7 @@ stds.didiermalenfant_pdutility = {
                                         init = {},
                                     }
                                 },
+                                new = {},
                                 init = {},
                                 update = {},
                                 print = {},
@@ -94,6 +95,7 @@ stds.didiermalenfant_pdutility = {
                                         init = {},
                                     }
                                 },
+                                new = {},
                                 init = {},
                                 reset = {},                                
                                 setDelay = {},
@@ -119,7 +121,8 @@ stds.didiermalenfant_pdutility = {
                                     fields = {
                                         init = {},
                                     }
-                                },        
+                                },
+                                new = {},
                                 init = {},
                                 draw = {},
                                 addLayer = {},
@@ -137,6 +140,7 @@ stds.didiermalenfant_pdutility = {
                                         init = {},
                                     }
                                 },
+                                new = {},
                                 init = {},
                                 subscribe = {},
                                 unsubscribe = {},
@@ -150,6 +154,7 @@ stds.didiermalenfant_pdutility = {
                                         init = {},
                                     }
                                 },
+                                new = {},
                                 init = {},
                                 __newindex = {},
                                 __index = {},

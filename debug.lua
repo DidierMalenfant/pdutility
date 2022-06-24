@@ -43,6 +43,10 @@ end
 -- Graphs samples collected/frame against a specified sample duration
 class("sampler", { }, pdutility.debug).extends()
 
+function pdutility.debug.sampler.new(...)
+    return pdutility.debug.sampler(...)
+end
+
 function pdutility.debug.sampler:init(sample_period, sampler_fn)
     pdutility.debug.sampler.super.init(self)
 
