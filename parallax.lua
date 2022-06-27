@@ -1,6 +1,6 @@
 --
 --  pdutility.graphics.parallax - Handy utility functions for Playdate development.
---  Based on code originally by Robert Curry.
+--  Based on code originally written by Robert Curry.
 --
 --  MIT License
 --  Copyright (c) 2022 Didier Malenfant.

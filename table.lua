@@ -1,6 +1,6 @@
 --
 --  pdutility.table - Handy utility functions for Playdate development.
---  Based on code originally by Nic Magnier, Matt Sephton.
+--  Based on code originally written by Nic Magnier, Matt Sephton.
 --
 --  MIT License
 --  Copyright (c) 2022 Didier Malenfant.

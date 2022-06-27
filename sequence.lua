@@ -1,6 +1,6 @@
 --
 --  pdutility.animation.sequence - Handy utility functions for Playdate development.
---  Based on code originally by Nic Magnier.
+--  Based on code originally written by Nic Magnier.
 --
 --  MIT License
 --  Copyright (c) 2022 Didier Malenfant.

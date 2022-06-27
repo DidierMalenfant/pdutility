@@ -1,6 +1,6 @@
 --
 --  pdutility.utils.state - Handy utility functions for Playdate development.
---  Based on code originally by Dustin Mierau.
+--  Based on code originally written by Dustin Mierau.
 --
 --  MIT License
 --  Copyright (c) 2022 Didier Malenfant.

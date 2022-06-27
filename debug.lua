@@ -1,6 +1,6 @@
 --
 --  pdutility.debug - Handy utility functions for Playdate development.
---  Based on code originally by Denisov Yaroslav, Dustin Mierau.
+--  Based on code originally written by Denisov Yaroslav, Dustin Mierau.
 --
 --  MIT License
 --  Copyright (c) 2022 Didier Malenfant.

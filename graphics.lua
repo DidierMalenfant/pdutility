@@ -1,6 +1,6 @@
 --
 --  pdutility.graphics - Handy utility functions for Playdate development.
---  Based on code originally by Dustin Mierau, jaames, Nic Magnier.
+--  Based on code originally written by Dustin Mierau, jaames, Nic Magnier.
 --
 --  MIT License
 --  Copyright (c) 2022 Didier Malenfant.
