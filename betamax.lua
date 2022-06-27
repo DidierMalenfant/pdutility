@@ -1,5 +1,5 @@
 --
---  pdutility.betamax - Handy utility functions for Playdate development.
+--  pdutility.debug.betamax - Handy utility functions for Playdate development.
 --  Based on code originally written by Nic Magnier.
 --
 --  MIT License

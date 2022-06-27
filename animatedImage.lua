@@ -1,5 +1,5 @@
 --
---  pdutility.animatedImage - Handy utility functions for Playdate development.
+--  pdutility.animation.animatedImage - Handy utility functions for Playdate development.
 --  Based on code originally written by Dustin Mierau.
 --
 --  MIT License
