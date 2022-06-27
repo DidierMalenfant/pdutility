@@ -28,16 +28,16 @@ import "CoreLibs/animation"
 import "CoreLibs/object"
 
 pdutility = pdutility or {}
-pdutility.graphics = pdutility.graphics or {}
+pdutility.animation = pdutility.animation or {}
 
 local gfx <const> = playdate.graphics
 local anim <const> = gfx.animation
 
 -- Graphs samples collected/frame against a specified sample duration
-class('animatedImage', { }, pdutility.graphics).extends()
+class('animatedImage', { }, pdutility.animation).extends()
 
-function pdutility.graphics.animatedImage.new(...)
-    return pdutility.graphics.animatedImage(...)
+function pdutility.animation.animatedImage.new(...)
+    return pdutility.animation.animatedImage(...)
 end
 
 -- image_table_path should be a path to an image table.
@@ -45,8 +45,8 @@ end
 --   delay:
 --   paused: start in a paused state.
 --   loop: loop the animation.
-function pdutility.graphics.animatedImage:init(image_table_path, options)
-    pdutility.graphics.animatedImage.super.init(self)
+function pdutility.animation.animatedImage:init(image_table_path, options)
+    pdutility.animation.animatedImage.super.init(self)
 
     options = options or {}
 
@@ -72,52 +72,52 @@ function pdutility.graphics.animatedImage:init(image_table_path, options)
     self.animation_loop.endFrame = options.last or self.image_table:getLength()
 end
 
-function pdutility.graphics.animatedImage:reset()
+function pdutility.animation.animatedImage:reset()
     self.loop.frame = 1
 end
 
-function pdutility.graphics.animatedImage:setDelay(delay)
+function pdutility.animation.animatedImage:setDelay(delay)
     self.loop.delay = delay
 end
 
-function pdutility.graphics.animatedImage:getDelay()
+function pdutility.animation.animatedImage:getDelay()
     return self.loop.delay
 end
 
-function pdutility.graphics.animatedImage:setShouldLoop(should_loop)
+function pdutility.animation.animatedImage:setShouldLoop(should_loop)
     self.loop.shouldLoop = should_loop
 end
 
-function pdutility.graphics.animatedImage:getShouldLoop()
+function pdutility.animation.animatedImage:getShouldLoop()
     return self.loop.shouldLoop
 end
 
-function pdutility.graphics.animatedImage:setPaused(paused)
+function pdutility.animation.animatedImage:setPaused(paused)
     self.loop.paused = paused
 end
 
-function pdutility.graphics.animatedImage:getPaused()
+function pdutility.animation.animatedImage:getPaused()
     return self.loop.paused
 end
 
-function pdutility.graphics.animatedImage:setFrame(frame)
+function pdutility.animation.animatedImage:setFrame(frame)
     self.loop.frame = frame
 end
 
-function pdutility.graphics.animatedImage:getFrame()
+function pdutility.animation.animatedImage:getFrame()
     return self.loop.frame
 end
 
-function pdutility.graphics.animatedImage:setFirstFrame(frame)
+function pdutility.animation.animatedImage:setFirstFrame(frame)
     self.loop.startFrame = frame
 end
 
-function pdutility.graphics.animatedImage:setLastFrame(frame)
+function pdutility.animation.animatedImage:setLastFrame(frame)
     self.loop.endFrame = frame
 end
 
-pdutility.graphics.animatedImage.__index = function(animated_image, key)
-    local proxy_value = rawget(pdutility.graphics.animatedImage, key)
+pdutility.animation.animatedImage.__index = function(animated_image, key)
+    local proxy_value = rawget(pdutility.animation.animatedImage, key)
     if proxy_value then
         return proxy_value
     end

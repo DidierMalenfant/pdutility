@@ -20,6 +20,33 @@ stds.didiermalenfant_pdutility = {
             fields = {
                 animation = {
                     fields = {
+                        animatedImage = {
+                            read_only = false,
+                            fields = {
+                                super = { 
+                                    read_only = false,
+                                    fields = {
+                                        className = {},
+                                        init = {},
+                                    }
+                                },
+                                className = {},
+                                new = {},
+                                init = {},
+                                reset = {},                                
+                                setDelay = {},
+                                getDelay = {},
+                                setShouldLoop = {},
+                                getShouldLoop = {},
+                                setPaused = {},
+                                getPaused = {},
+                                setFrame = {},
+                                getFrame = {},
+                                setFirstFrame = {},
+                                setLastFrame = {},
+                                __index = {},
+                            }                
+                        },
                         sequence = {
                             fields = {
                                 __index = {},
@@ -90,33 +117,6 @@ stds.didiermalenfant_pdutility = {
                 graphics = {
                     read_only = false,
                     fields = {
-                        animatedImage = {
-                            read_only = false,
-                            fields = {
-                                super = { 
-                                    read_only = false,
-                                    fields = {
-                                        className = {},
-                                        init = {},
-                                    }
-                                },
-                                className = {},
-                                new = {},
-                                init = {},
-                                reset = {},                                
-                                setDelay = {},
-                                getDelay = {},
-                                setShouldLoop = {},
-                                getShouldLoop = {},
-                                setPaused = {},
-                                getPaused = {},
-                                setFrame = {},
-                                getFrame = {},
-                                setFirstFrame = {},
-                                setLastFrame = {},
-                                __index = {},
-                            }                
-                        },
                         drawTiledImage = {},
                         drawQuadraticBezier = {},
                         drawCubicBezier = {},
