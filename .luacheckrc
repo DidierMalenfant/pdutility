@@ -21,10 +21,8 @@ stds.didiermalenfant_pdutility = {
                 animation = {
                     fields = {
                         animatedImage = {
-                            read_only = false,
                             fields = {
                                 super = { 
-                                    read_only = false,
                                     fields = {
                                         className = {},
                                         init = {},
@@ -85,10 +83,8 @@ stds.didiermalenfant_pdutility = {
                     }
                 },
                 debug = {
-                    read_only = false,
                     fields = {
                         betamax = {
-                            read_only = false,
                             fields = {
                                 eof = {},
                                 printFrame = {},
@@ -96,7 +92,6 @@ stds.didiermalenfant_pdutility = {
                         },                        
                         showToast = {},
                         sampler = {
-                            read_only = false,
                             fields = {
                                 super = { 
                                     fields = {
@@ -115,7 +110,6 @@ stds.didiermalenfant_pdutility = {
                     }
                 },
                 graphics = {
-                    read_only = false,
                     fields = {
                         drawTiledImage = {},
                         drawQuadraticBezier = {},
@@ -193,34 +187,34 @@ stds.didiermalenfant_pdutility = {
 
 -- betamax modifies some playdate globals.
 stds.didiermalenfant_pdutility_betamax = {
-    read_globals = {
+    globals = {
         math = {
             fields = {
-                randomseed = { read_only = false },
-                random = { read_only = false },
+                randomseed = {},
+                random = {},
             }
         },
         playdate = {
             fields = {
-                getCurrentTimeMilliseconds = { read_only = false },
-                getTime = { read_only = false },
-                getSecondsSinceEpoch = { read_only = false },
-                startAccelerometer = { read_only = false },
-                stopAccelerometer = { read_only = false },
-                getCurrentTimeMilliseconds = { read_only = false },
-                getTime = { read_only = false },
-                getSecondsSinceEpoch = { read_only = false },
-                buttonIsPressed = { read_only = false },
-                buttonJustPressed = { read_only = false },
-                buttonJustReleased = { read_only = false },
-                isCrankDocked = { read_only = false },
-                getCrankPosition = { read_only = false },
-                getCrankChange = { read_only = false },
-                accelerometerIsRunning = { read_only = false },
-                readAccelerometer = { read_only = false },
+                getCurrentTimeMilliseconds = {},
+                getTime = {},
+                getSecondsSinceEpoch = {},
+                startAccelerometer = {},
+                stopAccelerometer = {},
+                getCurrentTimeMilliseconds = {},
+                getTime = {},
+                getSecondsSinceEpoch = {},
+                buttonIsPressed = {},
+                buttonJustPressed = {},
+                buttonJustReleased = {},
+                isCrankDocked = {},
+                getCrankPosition = {},
+                getCrankChange = {},
+                accelerometerIsRunning = {},
+                readAccelerometer = {},
                 datastore = {
                     fields = {
-                        read = { read_only = false },
+                        read = {},
                     }
                 }
             }
@@ -230,12 +224,12 @@ stds.didiermalenfant_pdutility_betamax = {
 
 -- sequence modifies some playdate globals.
 stds.didiermalenfant_pdutility_sequence = {
-    read_globals = {
+    globals = {
         playdate = {
             fields = {
                 easingFunctions = {
                     fields = {
-                        flat = { read_only = false },
+                        flat = {},
                     }
                 },
             }
