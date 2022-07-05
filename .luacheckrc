@@ -109,6 +109,15 @@ stds.didiermalenfant_pdutility = {
                         }
                     }
                 },
+                filepath = {
+                    fields = {
+                        filename = {},
+                        extension = {},
+                        directory = {},
+                        basename = {},
+                        join = {},
+                    }
+                },
                 graphics = {
                     fields = {
                         drawTiledImage = {},

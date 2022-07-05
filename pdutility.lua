@@ -26,6 +26,7 @@
 import "animatedImage"
 import "betamax"
 import "debug"
+import "filepath"
 import "graphics"
 import "math"
 import "parallax"
