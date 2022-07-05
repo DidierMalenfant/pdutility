@@ -140,6 +140,11 @@ stds.didiermalenfant_pdutility = {
                                 scroll = {},
                             }
                         },
+                        tiled = {
+                            fields = {
+                                importTilemapsFromTiledJSON = {},
+                            }
+                        },
                     }
                 },
                 utils = {
